@@ -1,9 +1,9 @@
-# Finery
+# Finup
 
-Finery (_**Fin**der comm**e**nt **r**eplacement utilit**y**_) is a simple tool to replace strings inside macOS Finder comments.
+Finup (_**Fin**der comment **U**RI u**p**dater_) is a simple tool to replace URIs found inside macOS Finder comments.
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
-[![Latest release](https://img.shields.io/github/v/release/mhucka/finery.svg?style=flat-square&color=b44e88)](https://github.com/mhucka/finery/releases)
+[![Latest release](https://img.shields.io/github/v/release/mhucka/finup.svg?style=flat-square&color=b44e88)](https://github.com/mhucka/finup/releases)
 
 
 ## Table of contents
@@ -20,7 +20,7 @@ Finery (_**Fin**der comm**e**nt **r**eplacement utilit**y**_) is a simple tool t
 
 ## Introduction
 
-Finery is a command-line program written in Python 3 that allows you to manipulate Finder comments. Finery makes it easier to write scripts (e.g., in Bash/Bourne shell syntax, or AppleScripts) that update substrings inside existing Finder comments.
+Finup is a command-line program written in Python 3 that allows you to manipulate Finder comments. Finup makes it easier to write scripts (e.g., in Bash/Bourne shell syntax, or AppleScripts) that update URIs written into Finder comments.
 
 
 ## Installation
@@ -35,7 +35,7 @@ Finery is a command-line program written in Python 3 that allows you to manipula
 
 ## Getting help
 
-If you find an issue, please submit it in [the GitHub issue tracker](https://github.com/mhucka/finery/issues) for this repository.
+If you find an issue, please submit it in [the GitHub issue tracker](https://github.com/mhucka/finup/issues) for this repository.
 
 
 ## Contributing

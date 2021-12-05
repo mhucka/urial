@@ -1,4 +1,4 @@
-# Change log for Finery
+# Change log for Finup
 
 ## ★ Version 0.0.0 ★
 
