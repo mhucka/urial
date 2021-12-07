@@ -224,15 +224,19 @@ update-doi: vars
 	git diff-index --quiet HEAD CITATION.cff || \
 	     (git commit -m"Update DOI" CITATION.cff && git push -v --all)
 
-create-dist: clean
+packages: | vars
+	-mkdir -p dist/$(os)
+	-mkdir -p build/$(os)
 	python3 setup.py sdist bdist_wheel
+	mv dist/$(name)-$(version).tar.gz dist/$(os)/
+	mv dist/$(name)-$(version)-py3-none-any.whl dist/$(os)/
 	python3 -m twine check dist/$(os)/$(name)-$(version).tar.gz
 	python3 -m twine check dist/$(os)/$(name)-$(version)-py3-none-any.whl
 
-test-pypi: create-dist
+test-pypi: packages
 	python3 -m twine upload --repository testpypi dist/$(os)/$(name)-$(version)*.{whl,gz}
 
-pypi: create-dist
+pypi: packages
 	python3 -m twine upload dist/$(os)/$(name)-$(version)*.{gz,whl}
 
 
@@ -240,26 +244,28 @@ pypi: create-dist
 
 clean: clean-dist clean-build clean-release clean-other
 
-really-clean: clean really-clean-dist
+really-clean: clean really-clean-dist really-clean-build
 
-clean-dist: vars
+clean-dist:
 	-rm -fr dist/$(os)/$(name) dist/$(os)/$(app_name) $(zip_file) \
 	    dist/$(name)-$(version)-py3-none-any.whl
 
-really-clean-dist:;
-	-rm -fr dist/$(os)
+really-clean-dist:
+	-rm -fr dist
 
-clean-build:;
+clean-build:
 	-rm -rf build/$(os)
 
-clean-release:;
-	-rm -rf $(name).egg-info codemeta.json.bak $(init_file).bak README.md.bak
+really-clean-build:
+	-rm -rf build
 
-clean-other:;
-	-find ./ -name '*.pyc' -exec rm -f {} \;
-	-find ./ -name '__pycache__' -exec rm -rf {} \;
-	-find ./ -name 'Thumbs.db' -exec rm -f {} \;
+clean-release:
+	-rm -f $(name).egg-info codemeta.json.bak $(init_file).bak README.md.bak
+
+clean-other:
+	-rm -f *.pyc $(name)/*.pyc 
+	-rm -f __pycache__ $(name)/__pycache__
 	-rm -rf .cache
 
 .PHONY: release release-on-github update-init update-meta update-citation \
-	print-instructions create-dist clean test-pypi pypi
+	print-instructions packages clean test-pypi pypi
