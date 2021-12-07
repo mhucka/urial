@@ -22,7 +22,7 @@ the file "LICENSE" for more information.
 
 __program__     = 'urial'
 __version__     = '0.0.1'
-__description__ = 'Add/update a URI found in a Finder comment'
+__description__ = 'URI Addition tooL: add/update a URI in a macOS Finder comment'
 __url__         = 'https://github.com/mhucka/urial'
 __author__      = 'Michael Hucka'
 __email__       = 'mhucka@caltech.edu'
