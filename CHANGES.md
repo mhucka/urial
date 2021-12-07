@@ -1,4 +1,4 @@
-# Change log for Finup
+# Change log for Urial
 
 ## ★ Version 0.0.1 ★
 

@@ -1,8 +1,8 @@
 # =============================================================================
 # @file    requirements.txt
-# @brief   Python dependencies for Finup
+# @brief   Python dependencies for Urial
 # @license Please see the file named LICENSE in the project directory
-# @website https://github.com/mhucka/finup
+# @website https://github.com/mhucka/urial
 # =============================================================================
 
 appscript     == 1.1.2

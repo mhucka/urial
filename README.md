@@ -1,9 +1,9 @@
-# Finup
+# Urial<img width="11%" align="right" src="https://github.com/mhucka/urial/raw/main/.graphics/urial-icon.png">
 
-Finup (_**Fin**der comment **U**RI u**p**dater_) is a simple tool to replace URIs found inside macOS Finder comments.
+Urial (_**URI** **a**ddition too**l**_) is a simple tool to add or replace URIs found inside macOS Finder comments.
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
-[![Latest release](https://img.shields.io/github/v/release/mhucka/finup.svg?style=flat-square&color=b44e88)](https://github.com/mhucka/finup/releases)
+[![Latest release](https://img.shields.io/github/v/release/mhucka/urial.svg?style=flat-square&color=b44e88)](https://github.com/mhucka/urial/releases)
 
 
 ## Table of contents
@@ -20,7 +20,9 @@ Finup (_**Fin**der comment **U**RI u**p**dater_) is a simple tool to replace URI
 
 ## Introduction
 
-Finup is a command-line program written in Python 3 that allows you to manipulate Finder comments. Finup makes it easier to write scripts (e.g., in Bash/Bourne shell syntax, or AppleScripts) that update URIs written into Finder comments.
+Urial is a command-line program written in Python 3 that allows you to write and update URIs in the Finder comments of a file. Urial makes it easier to write scripts (e.g., in Bash/Bourne shell syntax, or AppleScripts) that keep those URIs updated.
+
+Incidentally, [urial](https://en.wikipedia.org/wiki/Urial) (properly known as _Ovis vignei_) are a kind of wild sheep native to Central and South Asia. They are listed as a [vulnerable species](https://www.iucnredlist.org/species/54940655/195296049) and their population continues to twindle due to human activity, hunting, and climate change.
 
 
 ## Installation
@@ -35,7 +37,7 @@ Finup is a command-line program written in Python 3 that allows you to manipulat
 
 ## Getting help
 
-If you find an issue, please submit it in [the GitHub issue tracker](https://github.com/mhucka/finup/issues) for this repository.
+If you find an issue, please submit it in [the GitHub issue tracker](https://github.com/mhucka/urial/issues) for this repository.
 
 
 ## Contributing

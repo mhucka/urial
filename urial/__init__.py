@@ -1,5 +1,5 @@
 '''
-Finup: Finder comment URI updater
+Urial: URI Addition tooL
 
 Authors
 -------
@@ -20,10 +20,10 @@ the file "LICENSE" for more information.
 #  |    by the Makefile. Manual changes to these values will be lost.      |
 #  ╰────────────────────── Notice ── Notice ── Notice ─────────────────────╯
 
-__program__     = 'finup'
+__program__     = 'urial'
 __version__     = '0.0.1'
-__description__ = 'Update a URI found in a Finder comment'
-__url__         = 'https://github.com/mhucka/finup'
+__description__ = 'Add/update a URI found in a Finder comment'
+__url__         = 'https://github.com/mhucka/urial'
 __author__      = 'Michael Hucka'
 __email__       = 'mhucka@caltech.edu'
 __license__     = 'BSD 3-clause'

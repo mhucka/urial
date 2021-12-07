@@ -1,5 +1,5 @@
 '''
-finup: Finder comment URI updater
+urial: URI Addition tooL
 
 Authors
 -------
@@ -16,7 +16,7 @@ Please see the file "LICENSE" for more information.
 
 import sys
 if sys.version_info <= (3, 8):
-    print('finup requires Python version 3.8 or higher,')
+    print('urial requires Python version 3.8 or higher,')
     print('but the current version of Python is ' +
           str(sys.version_info.major) + '.' + str(sys.version_info.minor) + '.')
     exit(1)
@@ -51,7 +51,7 @@ only if the Finder comment contains such a substring.  For example, if the file
 "somefile.md" contains a Finder comment with an existing x-devonthink-item
 URI inside of it, then the following command,
 
-  finup "x-devonthink-item://8A1A0F18-068680226F3" somefile.md
+  urial "x-devonthink-item://8A1A0F18-068680226F3" somefile.md
 
 will rewrite the URI part of the comment to have the new URI given on the
 command line.  If the Finder comment is not empty but does not contain a URI
@@ -61,10 +61,10 @@ is not changed unless a suitable value for the option --mode is given (see below
 Handling existing Finder comments
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If the file already has a Finder comment, the default behavior of finup is to
+If the file already has a Finder comment, the default behavior of urial is to
 first check if the comment contains a URI of the same scheme as the given URI;
-if it does, finup replaces the URI (and just the URI) substring in the Finder
-comment, and if it does not, finup appends the URL to the comment.  The --mode
+if it does, urial replaces the URI (and just the URI) substring in the Finder
+comment, and if it does not, urial appends the URL to the comment.  The --mode
 option can be used to change this behavior, as follows:
 
   append:    if the URI is NOT found in the Finder comment string, append the
@@ -90,7 +90,7 @@ to just
 
     URI
 
-assuming that "URI" is the URI given to finup on the command line.  If you want
+assuming that "URI" is the URI given to urial on the command line.  If you want
 to update the URI to a new value and leave the other comment text in place,
 use "--mode update" or simply don't provide a value for --mode (because
 update is the default action).
@@ -119,7 +119,7 @@ Command-line arguments summary
         set_debug(True, debug)
 
     if version:
-        from finup import print_version
+        from urial import print_version
         print_version()
         sys.exit(0)
 
@@ -207,7 +207,7 @@ def alert(msg, no_gui):
     if no_gui:
         print('‼️  ' + msg)
     else:
-        from finup import __program__
+        from urial import __program__
         from osax import OSAX
         sa = OSAX("StandardAdditions", name = "System Events")
         sa.activate()
@@ -229,7 +229,7 @@ def fatal(msg, no_gui):
 def console_scripts_main():
     main()
 
-# The following allows users to invoke this using "python3 -m finup".
+# The following allows users to invoke this using "python3 -m urial".
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'help':
         plac.call(main, ['-h'])
