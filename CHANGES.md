@@ -2,7 +2,7 @@
 
 ## ★ Version 0.0.1 ★
 
-Work in progress.
+First complete test release.
 
 
 ## ★ Version 0.0.0 ★
