@@ -192,26 +192,26 @@ release-on-github: | vars update-init update-meta update-citation commit-updates
 	$(eval tmp_file  := $(shell mktemp /tmp/release-notes-$(name).XXXX))
 	git push -v --all
 	git push -v --tags
-	$(info ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓)
-	$(info ┃ Write release notes in the file that will be opened in your editor ┃)
-	$(info ┃ then save and close the file to complete this release process.     ┃)
-	$(info ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛)
+	$(info ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓)
+	$(info ┃ Write release notes in the file opened in your editor, then ┃)
+	$(info ┃ save & close the file to complete the release process.      ┃)
+	$(info ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛)
 	sleep 2
 	$(EDITOR) $(tmp_file)
 	gh release create v$(version) -t "Release $(version)" -F $(tmp_file)
 
 print-instructions:;
-	$(info ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓)
-	$(info ┃ Next steps:                                                        ┃)
+	$(info ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓)
+	$(info ┃ Next steps:                                                 ┃)
 	$(info ┃ 1. Visit https://github.com/$(repo)/releases )
-	$(info ┃ 2. Double-check the release                                        ┃)
-	$(info ┃ 3. Wait a few seconds to let web services do their work            ┃)
-	$(info ┃ 4. Run "make update-doi" to update the DOI in README.md            ┃)
-	$(info ┃ 5. Run "make create-dist" and check the distribution for problems  ┃)
-	$(info ┃ 6. Run "make test-pypi" to push to test.pypi.org                   ┃)
+	$(info ┃ 2. Double-check the release                                 ┃)
+	$(info ┃ 3. Wait a few seconds to let web services do their work     ┃)
+	$(info ┃ 4. Run "make update-doi" to update the DOI in README.md     ┃)
+	$(info ┃ 5. Run "make packages" and check the distribution           ┃)
+	$(info ┃ 6. Run "make test-pypi" to push to test.pypi.org            ┃)
 	$(info ┃ 7. Double-check https://test.pypi.org/$(repo) )
-	$(info ┃ 8. Run "make pypi" to push to pypi for real                        ┃)
-	$(info ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛)
+	$(info ┃ 8. Run "make pypi" to push to pypi for real                 ┃)
+	$(info ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛)
 	@echo ""
 
 update-doi: vars
