@@ -227,9 +227,10 @@ def fatal(msg, no_gui):
 # option to setuptools.  The entry point for console_scripts has to be a
 # function that takes zero arguments.
 def console_scripts_main():
-    main()
+    plac.call(main)
 
-# The following allows users to invoke this using "python3 -m urial".
+# The following allows users to invoke this using "python3 -m urial" and also
+# pass it an argument of "help" to get the help text.
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'help':
         plac.call(main, ['-h'])
