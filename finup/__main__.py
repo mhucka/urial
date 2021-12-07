@@ -30,10 +30,10 @@ from   sidetrack import set_debug, log
 # .............................................................................
 
 @plac.annotations(
-    no_gui  = ('do not use macOS GUI dialogs',                       'flag',   'G'),
-    mode    = ('what to do if comment exists (append or overwrite)', 'option', 'm'),
-    version = ('print program version info and exit',                'flag',   'V'),
-    debug   = ('log debug output to "OUT" ("-" is console)',         'option', '@'),
+    no_gui  = ('do not use macOS GUI dialogs',                     'flag',   'G'),
+    mode    = ('what to do if comment exists (see help for info)', 'option', 'm'),
+    version = ('print program version info and exit',              'flag',   'V'),
+    debug   = ('log debug output to "OUT" ("-" is console)',       'option', '@'),
     args    = 'a URI followed by a file name',
 )
 
@@ -64,7 +64,7 @@ Handling existing Finder comments
 If the file already has a Finder comment, the default behavior of finup is to
 first check if the comment contains a URI of the same scheme as the given URI;
 if it does, finup replaces the URI (and just the URI) substring in the Finder
-comment, and if it does not, finup appends the url to the comment.  The --mode
+comment, and if it does not, finup appends the URL to the comment.  The --mode
 option can be used to change this behavior, as follows:
 
   append:    if the URI is NOT found in the Finder comment string, append the
@@ -84,7 +84,7 @@ Note that the behavior of "--mode overwrite" is to replace unconditionally the
 entire Finder comment.  In other words, "-- mode overwrite" will change a
 Finder comment such as
 
-    Blah blah blah. URI. Blah blah.
+    Blah blah blah. URI. More blah blah blah.
 
 to just
 
@@ -105,8 +105,8 @@ By default, this program will use macOS dialogs to report errors or other
 issues.  The option --no-gui will make it print messages only on the command
 line, without using GUI dialogs.
 
-If given the -@ argument, this program will output a detailed trace of what it
-is doing. The debug trace will be sent to the given destination, which can
+If given the --debug argument, this program will output a detailed trace of
+what it is doing. The trace will be sent to the given destination, which can
 be '-' to indicate console output, or a file path to send the output to a file.
 
 Command-line arguments summary
@@ -119,7 +119,7 @@ Command-line arguments summary
         set_debug(True, debug)
 
     if version:
-        from finup import print_version, __program__
+        from finup import print_version
         print_version()
         sys.exit(0)
 
@@ -203,17 +203,15 @@ def parsed_uri(uri):
 
 
 def alert(msg, no_gui):
-    from commonpy.string_utils import antiformat
-    log(f'alert: {antiformat(msg)}')
+    log('alert: ' + msg)
     if no_gui:
         print('‼️  ' + msg)
     else:
         from finup import __program__
-        import mactypes
         from osax import OSAX
         sa = OSAX("StandardAdditions", name = "System Events")
         sa.activate()
-        sa.display_dialog('Finup encountered an error:\n\n' + msg,
+        sa.display_dialog(__program__.title() + ' error:\n\n' + msg,
                           buttons = ["OK"], with_icon = 0)
 
 
