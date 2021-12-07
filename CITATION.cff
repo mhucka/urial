@@ -1,0 +1,20 @@
+# YAML 1.2
+---
+authors: 
+  -
+    affiliation: "California Institute of Technology Library"
+    given-names: Mike
+    family-names: Hucka
+    orcid: "0000-0001-9105-5960"
+cff-version: "1.1.0"
+message: "If you use this software, please cite it using these metadata."
+repository-code: "https://github.com/caltechlibrary/urial"
+title: "Urial (URI Addition tooL): add/update URIs in macOS Finder comments"
+date-released: 2021-12-07
+version: "0.0.1"
+doi: 10.22002/0000
+keywords: 
+  - macOS
+  - URI
+  - desktop software
+...
