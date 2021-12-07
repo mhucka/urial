@@ -12,7 +12,7 @@ repository-code: "https://github.com/caltechlibrary/urial"
 title: "Urial (URI Addition tooL): add/update URIs in macOS Finder comments"
 date-released: 2021-12-07
 version: "0.0.1"
-doi: 10.22002/0000
+doi: 10.22002/2205
 keywords: 
   - macOS
   - URI
