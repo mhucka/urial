@@ -96,7 +96,7 @@ If the file already has a Finder comment, the default behavior of `urial` is to 
 
 * `append`: if the URI is NOT found in the Finder comment string, append the given URI to the end of the comment; otherwise (if the comment string already contains the URI) do nothing
 * `overwrite`: overwrite the Finder comment completely with the given URI string, no matter what the Finder comment string contains (even if it already contains the given URI)
-  `update`: (default) if a URI of the same kind exists in the comment, replace only the URI portion of the comment string (preserving the rest of the comment string), else (if a URI is NOT found in the comment string) do nothing
+* `update`: (default) if a URI of the same kind exists in the comment, replace only the URI portion of the comment string (preserving the rest of the comment string), else (if a URI is NOT found in the comment string) do nothing
 
 Note that the behavior of `--mode overwrite` is to replace unconditionally the entire Finder comment.  In other words, `-- mode overwrite` will change a Finder comment such as
 
