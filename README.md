@@ -23,9 +23,9 @@ Urial (_**URI** **a**ddition too**l**_) is a simple but intelligent command-line
 
 ## Introduction
 
-Urial is a command-line program written in Python 3 that allows you to write and update URIs in the Finder comments of a file. Urial makes it easier to write scripts (e.g., in Bash/Bourne shell syntax, or AppleScripts) that keep those URIs updated.
+_Urial_ (a loose acronym of _**URI** **a**ddition too**l**_) is a command-line program written in Python 3 that allows you to write and update URIs in the macOS Finder comments of a file. Urial makes it easier to write scripts (e.g., in Bash/Bourne shell syntax, or AppleScripts) that keep those URIs updated.
 
-Incidentally, [urial](https://en.wikipedia.org/wiki/Urial) (properly known as _Ovis vignei_) are a kind of wild sheep native to Central and South Asia. They are listed as a [vulnerable species](https://www.iucnredlist.org/species/54940655/195296049) and their population continues to twindle due to human activity, hunting, and climate change.
+Incidentally, the [urial](https://en.wikipedia.org/wiki/Urial) (properly known as _Ovis vignei_) are a kind of wild sheep native to Central and South Asia. They are listed as a [vulnerable species](https://www.iucnredlist.org/species/54940655/195296049) and their population continues to twindle due to human activity, hunting, and climate change.
 
 
 ## Installation
@@ -77,28 +77,34 @@ python3 setup.py install
 
 ## Usage
 
-This program expects to be given at least two argument values.  The first value is taken to be a string containing a URI, and the second value is the path of a file whose Finder comment should be updated with the given string.  Optional arguments begin with dashes and modify the program's behavior.
+The program `urial` expects to be given at least two argument values on the command line.  The first value is expected to be a URI, and the second value must be the path of a file whose Finder comment should be updated with the given URI.  Optional arguments to `urial` begin with dashes and modify the program's behavior as discussed below.
 
-By default, if file already has any Finder comment, it is only modified to update the substring that has the same type of URI, and then only if the Finder comment contains such a substring.  For example, if the file "somefile.md" contains a Finder comment with an existing `x-devonthink-item` URI inside of it, then the following command,
+### Default behavior
+
+By default, if the file already has any Finder comment at all, the comment will only be modified to update the substring that has the same type of URI, and then only if the Finder comment contains such a substring.  For example, if the file "somefile.md" contains a Finder comment with an existing `x-devonthink-item` URI inside of it, then the following command,
 
 ```sh
-urial "x-devonthink-item://8A1A0F18-068680226F3" somefile.md
+urial  x-devonthink-item://8A1A0F18-0686-802-26F33443  somefile.md
 ```
 
-will rewrite the URI part of the comment to have the new URI given on the command line.  If the Finder comment is not empty but does not contain a URI of the same kind as the one given on the command line, then the Finder comment is not changed unless a suitable value for the option `--mode` is given (see below). 
+<img src="https://github.com/mhucka/urial/raw/main/.graphics/finder-get-info-screenshot.png" width="270px" align="right">
 
-Urial users regular expression pattern matching to find the same kind of URI as the value you provide on the command line, to make it more robust against accidentally matching other URIs that may exist in a Finder comment. So, for example, If you supply a URI that has a `x-devonthink-item` scheme type, it will look only for `x-devonthink-item` URIs and will not match other URIs; if you supply a URI that has a `zotero` scheme type, it will look only for those URIs; and so on.
+will rewrite the URI part of the comment to have the new URI given on the command line. The result will be as shown in the screenshot at right.
+
+If the Finder comment is _not_ empty but does not contain a URI of the same kind as the one given on the command line, then the Finder comment is not changed unless a suitable value for the option `--mode` is given (see below).
+
+`urial` users regular expression pattern matching to find the same kind of URI as the value you provide on the command line, to make it more robust against accidentally matching other URIs that may exist in a Finder comment. So, for example, If you supply a URI that has a `x-devonthink-item` scheme type, it will _look_ only for `x-devonthink-item` URIs and will not match other URIs; if you supply a URI that has a `zotero` scheme type, it will look only for `zotero` URIs; and so on.
 
 
-### Handling existing Finder comments
+### Options for handling existing Finder comments
 
-If the file already has a Finder comment, the default behavior of `urial` is to first check if the comment contains a URI of the same scheme as the given URI; if it does, `urial` replaces the URI (and just the URI) substring in the Finder comment, and if it does not, `urial` instead _appends_ the URL to the comment.  The `--mode` option can be used to change this behavior, as follows:
+As explained above, if the file already has a Finder comment, the default behavior of `urial` is to first check if the comment contains a URI of the same scheme as the given URI; if it does, `urial` replaces that URI (and just that URI) substring in the Finder comment  The `--mode` option can be used to change this behavior, as follows:
 
-* `append`: if the URI is NOT found in the Finder comment string, append the given URI to the end of the comment; otherwise (if the comment string already contains the URI) do nothing
-* `overwrite`: overwrite the Finder comment completely with the given URI string, no matter what the Finder comment string contains (even if it already contains the given URI)
-* `update`: (default) if a URI of the same kind exists in the comment, replace only the URI portion of the comment string (preserving the rest of the comment string), else (if a URI is NOT found in the comment string) do nothing
+* `append`: if the URI is _not_ found in the Finder comment string, `urial` will append the given URI to the end of the comment; otherwise (if the comment string already contains the URI) it will do nothing.
+* `overwrite`: the program will overwrite the Finder comment completely with the given URI string, no matter what the Finder comment string contains (even if it already contains the given URI).
+* `update`: (default) if a URI of the same kind exists in the comment, `urial` will replace only the URI portion of the comment string (preserving the rest of the comment string), else (if a URI is NOT found in the comment string) it will do nothing.
 
-Note that the behavior of `--mode overwrite` is to replace unconditionally the entire Finder comment.  In other words, `-- mode overwrite` will change a Finder comment such as
+Note that the behavior of `--mode overwrite` is to replace unconditionally the entire Finder comment.  In other words, `--mode overwrite` will change a Finder comment such as
 
     Blah blah blah. URI. More blah blah blah.
 
@@ -109,13 +115,29 @@ to just
 assuming that `URI` is the URI given to urial on the command line.  If you want to update the URI to a new value and leave the other comment text in place, use `--mode update` or simply don't provide a value for `--mode` (because `update` is the default action).
 
 
-### Additional command-line arguments
+### Additional command-line options
 
 If given the `--version` option, this program will print the version and other information, and exit without doing anything else.
 
 By default, this program will use macOS dialogs to report errors or other issues.  The option `--no-gui` will make it print messages only on the command line, without using GUI dialogs.
 
-If given the `--debug` argument, this program will output a detailed trace of what it is doing. The trace will be sent to the given destination, which can be `-` to indicate console output, or a file path to send the output to a file.
+If given the `--debug` argument, this program will output a detailed trace of what it is doing. The trace will be sent to the destination given as the value of the option, which can be `-` (i.e., a dash) to indicate console output, or a file path to send the output to a file.
+
+
+### _Summary of command-line options_
+
+The following table summarizes all the command line options available.
+
+| Short&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   | Long&nbsp;form&nbsp;opt&nbsp;&nbsp;&nbsp;&nbsp; | Meaning | Default |  |
+|---------- |-------------------|--------------------------------------|---------|---|
+| `-G`      | `--no-gui`        | Print errors & warnings to terminal; don't use GUI dialogs | Use GUI dialogs | |
+| `-h`      | `--help`          | Display help text and exit | | |
+| `-m`      | `--mode`_M_       | Approach for handling existing comments | `update` | ⚑ |
+| `-V`      | `--version`       | Display program version info and exit | | |
+| `-@`_OUT_ | `--debug`_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
+
+⚑ &nbsp; Available values are `append`, `overwrite`, and `update`.<br>
+⬥ &nbsp; To write to the console, use the character `-` as the value of _OUT_; otherwise, _OUT_ must be the name of a file where the output should be written.<br>
 
 
 ## Getting help
