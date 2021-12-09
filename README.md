@@ -39,7 +39,7 @@ You can use [pipx](https://pypa.github.io/pipx/) to install Urial. Pipx will ins
 pipx install urial
 ```
 
-Pipx can also let you run Urial directly using `pipx run urial`, although in that case, you must always prefix every Urial command with `pipx run`.  Consult the [documentation for `pipx run`](https://github.com/pypa/pipx#walkthrough-running-an-application-in-a-temporary-virtual-environment) for more information.
+Pipx can also let you run Urial directly using `pipx run urial`, although in that case, you must always prefix every `urial` command with `pipx run`.  Consult the [documentation for `pipx run`](https://github.com/pypa/pipx#walkthrough-running-an-application-in-a-temporary-virtual-environment) for more information.
 
 
 ### _Alternative 2: installing Urial using `pip`_
@@ -163,7 +163,7 @@ The [vector artwork](https://thenounproject.com/icon/bighorn-sheep-head-2608122/
 
 Urial makes use of numerous open-source packages, without which Urial could not have been developed.  I want to acknowledge this debt.  In alphabetical order, the packages are:
 
-* [appscript](http://appscript.sourceforge.net/py-appscript/doc.html) &ndash; high-level Apple event bridge that allows you to control scriptable Mac OS X applications
+* [appscript](http://appscript.sourceforge.net/py-appscript/doc.html) &ndash; high-level Apple event bridge for controlling scriptable Mac OS X applications
 * [plac](http://micheles.github.io/plac/) &ndash; a command line argument parser
 * [setuptools](https://github.com/pypa/setuptools) &ndash; library for `setup.py`
 * [Sidetrack](https://github.com/caltechlibrary/sidetrack) &ndash; simple debug logging/tracing package
