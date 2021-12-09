@@ -145,6 +145,7 @@ Command-line arguments summary
     import appscript
     import mactypes
     try:
+        log(f'urial is running in {mode} mode')
         log('telling Finder to open file ' + file)
         finder = appscript.app('Finder')
         finder_file = finder.items[mactypes.Alias(file)]
