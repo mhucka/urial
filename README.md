@@ -23,7 +23,7 @@ Urial (_**URI** **a**ddition too**l**_) is a simple but intelligent command-line
 
 ## Introduction
 
-_Urial_ (a loose acronym of _**URI** **a**ddition too**l**_) is a command-line program written in Python 3 that allows you to write and update URIs in the macOS Finder comments of a file. Urial makes it easier to write scripts (e.g., in Bash/Bourne shell syntax, or AppleScripts) that keep those URIs updated.
+_Urial_ (a loose acronym of _**URI** **a**ddition too**l**_) is a command-line program written in Python 3 that allows you to write and update URIs in the macOS Finder comments of a file. Urial makes it easier to write scripts (e.g., in Bash/Bourne shell syntax, or AppleScripts) that keep those URIs updated.  You can find an example of how the author uses this program with [DEVONthink](https://www.devontechnologies.com/apps/devonthink) in the project [wiki](https://github.com/mhucka/urial/wiki).
 
 Incidentally, the [urial](https://en.wikipedia.org/wiki/Urial) (properly known as _Ovis vignei_) are a kind of wild sheep native to Central and South Asia. They are listed as a [vulnerable species](https://www.iucnredlist.org/species/54940655/195296049) and their population continues to twindle due to human activity, hunting, and climate change.
 
@@ -79,32 +79,32 @@ python3 setup.py install
 
 The program `urial` expects to be given at least two argument values on the command line.  The first value is expected to be a URI, and the second value must be the path of a file whose Finder comment should be updated with the given URI.  Optional arguments to `urial` begin with dashes and modify the program's behavior as discussed below.
 
-### Default behavior
+### Default behavior<img src="https://github.com/mhucka/urial/raw/main/.graphics/finder-get-info-screenshot.png" width="270px" align="right">
 
-By default, if the file already has any Finder comment at all, the comment will only be modified to update the substring that has the same type of URI, and then only if the Finder comment contains such a substring.  For example, if the file "somefile.md" contains a Finder comment with an existing `x-devonthink-item` URI inside of it, then the following command,
+If the Finder comment for the file is empty, then `urial` will write the URI as the comment. The result will be as shown in the screenshot at right. 
+
+If the Finder comment is _not_ empty, `urial` will modify the comment to update the substring that has the same type of URI, and then only if `urial` finds such a substring in the Finder comment.  For example, if the file "somefile.md" has a Finder comment with an existing `x-devonthink-item` URI string somewhere inside of it, then the following command,
 
 ```sh
 urial  x-devonthink-item://8A1A0F18-0686-802-26F33443  somefile.md
 ```
 
-<img src="https://github.com/mhucka/urial/raw/main/.graphics/finder-get-info-screenshot.png" width="270px" align="right">
+will rewrite **just the URI part of the comment** to have the new URI given on the command line.
 
-will rewrite the URI part of the comment to have the new URI given on the command line. The result will be as shown in the screenshot at right.
-
-If the Finder comment is _not_ empty but does not contain a URI of the same kind as the one given on the command line, then the Finder comment is not changed unless a suitable value for the option `--mode` is given (see below).
+If the Finder comment is not empty but also does _not_ contain a URI of the same kind as the one given on the command line, then the Finder comment is not changed, unless a suitable value for the option `--mode` is given (see below).
 
 `urial` users regular expression pattern matching to find the same kind of URI as the value you provide on the command line, to make it more robust against accidentally matching other URIs that may exist in a Finder comment. So, for example, If you supply a URI that has a `x-devonthink-item` scheme type, it will _look_ only for `x-devonthink-item` URIs and will not match other URIs; if you supply a URI that has a `zotero` scheme type, it will look only for `zotero` URIs; and so on.
 
 
 ### Options for handling existing Finder comments
 
-As explained above, if the file already has a Finder comment, the default behavior of `urial` is to first check if the comment contains a URI of the same scheme as the given URI; if it does, `urial` replaces that URI (and just that URI) substring in the Finder comment  The `--mode` option can be used to change this behavior, as follows:
+The `--mode` option can be used to change the behavior described above. The following are the possible values for this option:
 
-* `append`: if the URI is _not_ found in the Finder comment string, `urial` will append the given URI to the end of the comment; otherwise (if the comment string already contains the URI) it will do nothing.
+* `append`: in this mode, if the URI is _not_ found in the Finder comment string, `urial` will append the given URI to the end of the comment; otherwise (if the comment string already contains the URI) it will do nothing.
 * `overwrite`: the program will overwrite the Finder comment completely with the given URI string, no matter what the Finder comment string contains (even if it already contains the given URI).
 * `update`: (default) if a URI of the same kind exists in the comment, `urial` will replace only the URI portion of the comment string (preserving the rest of the comment string), else (if a URI is NOT found in the comment string) it will do nothing.
 
-Note that the behavior of `--mode overwrite` is to replace unconditionally the entire Finder comment.  In other words, `--mode overwrite` will change a Finder comment such as
+Note carefully that `--mode overwrite` makes `urial` replace unconditionally the entire Finder comment.  In other words, `--mode overwrite` will change a Finder comment such as
 
     Blah blah blah. URI. More blah blah blah.
 
@@ -141,6 +141,8 @@ The following table summarizes all the command line options available.
 
 
 ## Getting help
+
+Some notes about how the author uses this program can be found in the [wiki](https://github.com/mhucka/urial/wiki).
 
 If you find an issue, please submit it in [the GitHub issue tracker](https://github.com/mhucka/urial/issues) for this repository.
 
