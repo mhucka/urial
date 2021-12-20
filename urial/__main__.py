@@ -113,6 +113,10 @@ Command-line arguments summary
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 '''
 
+    # Define shortcut functions for common user feedback actions.
+    def alert(msg): inform(msg, no_gui)
+    def stop(msg): inform(msg, no_gui), sys.exit(1)
+
     # Process arguments & handle early exits ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     if debug != 'OUT':
@@ -124,21 +128,21 @@ Command-line arguments summary
         sys.exit(0)
 
     if len(args) < 2:
-        fatal('Must be given at least two arguments: a URI and a file path.', no_gui)
+        stop('Must be given at least two arguments: a URI and a file path.')
 
     uri = args[0]
     scheme, rest = parsed_uri(uri)
     if not scheme:
-        fatal(f'Could not interpret argument value "' + uri + '" as a URI.', no_gui)
+        stop(f'Could not interpret argument value "' + uri + '" as a URI.')
 
     mode = 'update' if mode == 'M' else mode
     if not mode in ['update', 'append', 'overwrite']:
-        fatal(f'Unrecognized mode value: {mode}')
+        stop(f'Unrecognized mode value: {mode}')
 
     from os.path import exists
     file = args[1]
     if not exists(file):
-        fatal(f'File does not appear to exist: "{file}"', no_gui)
+        stop(f'File does not appear to exist: {file}')
 
     # Do the real work --------------------------------------------------------
 
@@ -185,7 +189,7 @@ Command-line arguments summary
         log(f'user interrupted program -- exiting')
         sys.exit(0)
     except Exception as ex:
-       fatal(f'Encountered error: ' + str(ex), no_gui)
+       stop(f'Encountered error: ' + str(ex))
 
     log('done.')
     sys.exit(0)
@@ -203,7 +207,7 @@ def parsed_uri(uri):
     return parts[0], parts[1]
 
 
-def alert(msg, no_gui):
+def inform(msg, no_gui):
     log('alert: ' + msg)
     if no_gui:
         print('‼️  ' + msg)
@@ -212,13 +216,9 @@ def alert(msg, no_gui):
         from osax import OSAX
         sa = OSAX("StandardAdditions", name = "System Events")
         sa.activate()
-        sa.display_dialog(__program__.title() + ' error:\n\n' + msg,
-                          buttons = ["OK"], with_icon = 0)
-
-
-def fatal(msg, no_gui):
-    alert(msg, no_gui)
-    sys.exit(1)
+        # The text below uses Unicode characters to get bold text.
+        sa.display_dialog('𝗨𝗿𝗶𝗮𝗹 𝗲𝗿𝗿𝗼𝗿:\n\n' + msg,
+                          buttons = ["OK"], default_button = 'OK', with_icon = 0)
 
 
 # Main entry point.
