@@ -141,6 +141,8 @@ Command-line arguments summary
 
     from os.path import exists
     file = args[1]
+    if file == '':
+        stop(f'File name is an empty string.')
     if not exists(file):
         stop(f'File does not appear to exist: {file}')
 
