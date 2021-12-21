@@ -30,14 +30,16 @@ from   sidetrack import set_debug, log
 # .............................................................................
 
 @plac.annotations(
-    no_gui  = ('do not use macOS GUI dialogs',                     'flag',   'G'),
-    mode    = ('what to do if comment exists (see help for info)', 'option', 'm'),
-    version = ('print program version info and exit',              'flag',   'V'),
-    debug   = ('log debug output to "OUT" ("-" is console)',       'option', '@'),
+    mode    = ('how to handle existing comment (see help for info)', 'option', 'm'),
+    show    = ('print the Finder comment or the URI, and exit',      'option', 's'),
+    no_gui  = ('do not use macOS GUI dialogs for error messages',    'flag',   'U'),
+    version = ('print program version info and exit',                'flag',   'V'),
+    debug   = ('log debug output to "OUT" ("-" is console)',         'option', '@'),
     args    = 'a URI followed by a file name',
 )
 
-def main(no_gui = False, mode = 'M', version = False, debug = 'OUT', *args):
+def main(mode = 'M', show = 'S', no_gui = False, version = False,
+         debug = 'OUT', *args):
     '''Add or update a URI in a Finder comment.
 
 This program expects to be given at least two argument values.  The first
@@ -45,27 +47,31 @@ value is taken to be a string containing a URI, and the second value is the
 path of a file whose Finder comment should be updated with the given string.
 Optional arguments begin with dashes and modify the program's behavior.
 
-By default, if the Finder comment of the file already has any value, it is
-only modified to update the substring that has the same type of URI, and then
-only if the Finder comment contains such a substring.  For example, if the file
+Default behavior
+~~~~~~~~~~~~~~~~
+
+If the current Finder comment for the file is empty, then this program will
+write the URI into the Finder comment.
+
+If the current Finder comment is not empty, this program will modify the
+comment to update the substring that has the same type of URI, and then only
+if urial finds such a substring in the Finder comment. For example, if the file
 "somefile.md" contains a Finder comment with an existing x-devonthink-item
 URI inside of it, then the following command,
 
-  urial "x-devonthink-item://8A1A0F18-068680226F3" somefile.md
+  urial  x-devonthink-item://8A1A0F18-068680226F3  somefile.md
 
-will rewrite the URI part of the comment to have the new URI given on the
-command line.  If the Finder comment is not empty but does not contain a URI
-of the same kind as the one given on the command line, then the Finder comment
-is not changed unless a suitable value for the option --mode is given (see below).
+will rewrite just the URI part of the comment to have the new URI given on the
+command line.
 
-Handling existing Finder comments
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If the current Finder comment is not empty but also does not contain a URI of
+the same kind as the one given on the command line, then the Finder comment is
+not changed unless a suitable value for the option --mode is given (see below).
 
-If the file already has a Finder comment, the default behavior of urial is to
-first check if the comment contains a URI of the same scheme as the given URI;
-if it does, urial replaces the URI (and just the URI) substring in the Finder
-comment, and if it does not, urial appends the URL to the comment.  The --mode
-option can be used to change this behavior, as follows:
+Options for handling existing Finder comments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The --mode option can be used to change this program's behavior, as follows:
 
   append:    if the URI is NOT found in the Finder comment string, append the
              given URI to the end of the comment; otherwise (if the comment
@@ -94,6 +100,22 @@ assuming that "URI" is the URI given to urial on the command line.  If you want
 to update the URI to a new value and leave the other comment text in place,
 use "--mode update" or simply don't provide a value for --mode (because
 update is the default action).
+
+Printing the Finder comment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Instead of writing a Finder comment, urial can be used to print an existing
+comment via the --show option. The --show option takes a required argument,
+which can be either "comment" or "uri"; the former causes urial to print the
+entire Finder comment of the file, and the latter just the URI(s) found in
+the comment. For example, given a file named "somefile.md", the following
+command will extract and print any URI(s) found anywhere in the Finder
+comment text:
+
+  urial --show uri somefile.md
+
+If more than one URI is found in the Finder comment, they will be printed
+separately to the terminal, one per line.
 
 Additional command-line arguments
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -127,22 +149,28 @@ Command-line arguments summary
         print_version()
         sys.exit(0)
 
-    if len(args) < 2:
-        stop('Must be given at least two arguments: a URI and a file path.')
-
-    uri = args[0]
-    scheme, rest = parsed_uri(uri)
-    if not scheme:
-        stop(f'Could not interpret argument value "' + uri + '" as a URI.')
-
     mode = 'update' if mode == 'M' else mode
     if not mode in ['update', 'append', 'overwrite']:
         stop(f'Unrecognized mode value: {mode}')
 
-    from os.path import exists
-    file = args[1]
+    show = show.lower() if show != 'S' else False
+    if show:
+        if show not in ['comment', 'uri']:
+            stop(f'Invalid option value for --show: {show}. The valid options'
+                 + ' are "comment" and "uri".')
+        file = args[0]
+    else:
+        if len(args) < 2:
+            stop('Must be given at least two arguments: a URI and a file path.')
+        uri = args[0]
+        file = args[1]
+        scheme, rest = parsed_uri(uri)
+        if not scheme:
+            stop(f'Could not interpret argument value "' + uri + '" as a URI.')
+
     if file == '':
         stop(f'File name is an empty string.')
+    from os.path import exists
     if not exists(file):
         stop(f'File does not appear to exist: {file}')
 
@@ -156,7 +184,12 @@ Command-line arguments summary
         finder = appscript.app('Finder')
         finder_file = finder.items[mactypes.Alias(file)]
         comment = finder_file.comment()
-        if not comment:
+        if show:
+            if show == 'comment':
+                print(comment)
+            elif (uris := uris_in_text(comment)):
+                print(r'\n'.join(uris))
+        elif not comment:
             log('file has no comment, so writing ' + uri)
             finder_file.comment.set(uri)
         elif mode == 'overwrite':
@@ -174,7 +207,7 @@ Command-line arguments summary
             else:
                 # Mode is update.
                 import re
-                regex = r'(.*?)(?!' + scheme + ')?' + scheme + '://' + '([^\s]+)(.*?)'
+                regex = r'(.*?)(?!' + scheme + ')?' + scheme + '://' + '([^\s".,;<>(){}\[\]]+)(.*?)'
                 s = re.search(regex, comment, re.IGNORECASE)
                 new_comment = s.group(1) + scheme + '://' + rest + s.group(3)
                 log('writing new comment: ' + new_comment)
@@ -191,7 +224,10 @@ Command-line arguments summary
         log(f'user interrupted program -- exiting')
         sys.exit(0)
     except Exception as ex:
-       stop(f'Encountered error: ' + str(ex))
+       from traceback import format_exception
+       exception = sys.exc_info()
+       details = ''.join(format_exception(*exception))
+       stop(f'Encountered error: ' + str(ex) + '\n\n' + details)
 
     log('done.')
     sys.exit(0)
@@ -199,6 +235,23 @@ Command-line arguments summary
 
 # Miscellaneous helpers.
 # .............................................................................
+
+# FIXME the only reason for the split is to get the scheme in another part of
+# the code above, but if I return a single uri instead, then the code above
+# could take do a split on :// to get the scheme pretty easily.
+
+def uris_in_text(text):
+    import re
+    uris = []
+    split_chars = '!"#$%\'()*+.,;<>@[]^`{}'
+    splitter = str.maketrans(split_chars, ' '*len(split_chars))
+    chunks = str.translate(text, splitter).split(' ')
+    for chunk in filter(None, chunks):
+        left, right = parsed_uri(chunk)
+        if left:
+            uris.append(left + '://' + right)
+    return uris
+
 
 def parsed_uri(uri):
     if '://' not in uri:
@@ -210,7 +263,7 @@ def parsed_uri(uri):
 
 
 def inform(msg, no_gui):
-    log('alert: ' + msg)
+    log('inform: ' + msg)
     if no_gui:
         print('‼️  ' + msg)
     else:
