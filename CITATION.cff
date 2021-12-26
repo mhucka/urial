@@ -11,7 +11,7 @@ message: "If you use this software, please cite it using these metadata."
 repository-code: "https://github.com/caltechlibrary/urial"
 title: "Urial (URI Addition tooL): add/update URIs in macOS Finder comments"
 date-released: 2021-12-07
-version: "0.0.3"
+version: "0.0.4"
 doi: 10.22002/8762
 keywords: 
   - macOS
