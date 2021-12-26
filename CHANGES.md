@@ -1,5 +1,10 @@
 # Change log for Urial
 
+## ★ Version 0.0.4 ★
+
+This release updates `requirements.txt` for some missing dependencies.
+
+
 ## ★ Version 0.0.3 ★
 
 Changes in this release:
