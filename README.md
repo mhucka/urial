@@ -1,6 +1,6 @@
 # Urial<img width="12%" align="right" src="https://github.com/mhucka/urial/raw/main/.graphics/urial-icon.png">
 
-Urial (_**URI** **a**ddition too**l**_) is a simple but intelligent command-line tool to add or replace URIs found inside macOS Finder comments.
+Urial (_**URI** **a**ddition too**l**_) is a simple but intelligent command-line tool to add, view, or replace URIs in macOS Finder comments.
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
 [![Python](https://img.shields.io/badge/Python-3.6+-brightgreen.svg?style=flat-square)](http://shields.io)
@@ -23,9 +23,9 @@ Urial (_**URI** **a**ddition too**l**_) is a simple but intelligent command-line
 
 ## Introduction
 
-_Urial_ (a loose acronym of _**URI** **a**ddition too**l**_) is a command-line program written in Python 3 that allows you to write and update URIs in the macOS Finder comments of a file. Urial makes it easier to write scripts (e.g., in Bash/Bourne shell syntax, or AppleScripts) that keep those URIs updated.  You can find an example of how the author uses this program with [DEVONthink](https://www.devontechnologies.com/apps/devonthink) in the project [wiki](https://github.com/mhucka/urial/wiki).
+_Urial_ (a loose acronym of _**URI** **a**ddition too**l**_) is a command-line program written in Python 3 that allows you to read, write and update URIs in the macOS Finder comments of a file. Urial makes it easier to create scripts (e.g., in Bash/Bourne shell syntax, or AppleScripts) that keep those URIs updated.  You can find an example of how the author uses this program with [DEVONthink](https://www.devontechnologies.com/apps/devonthink) in the project [wiki](https://github.com/mhucka/urial/wiki).
 
-Incidentally, the [urial](https://en.wikipedia.org/wiki/Urial) (properly known as _Ovis vignei_) are a kind of wild sheep native to Central and South Asia. They are listed as a [vulnerable species](https://www.iucnredlist.org/species/54940655/195296049) and their population continues to twindle due to human activity, hunting, and climate change.
+Incidentally, the [urial](https://en.wikipedia.org/wiki/Urial) (properly known as _Ovis vignei_) are a kind of wild sheep native to Central and South Asia.  They are listed as a [vulnerable species](https://www.iucnredlist.org/species/54940655/195296049) and their population continues to twindle due to human activity, hunting, and climate change.
 
 
 ## Installation
@@ -77,23 +77,58 @@ python3 setup.py install
 
 ## Usage
 
-The program `urial` expects to be given at least two argument values on the command line.  The first value is expected to be a URI, and the second value must be the path of a file whose Finder comment should be updated with the given URI.  Optional arguments to `urial` begin with dashes and modify the program's behavior as discussed below.
+This program expects to be given one or more arguments on the command line, as described below.  Optional arguments begin with dashes and modify the program's behavior.
 
-### Default behavior<img src="https://github.com/mhucka/urial/raw/main/.graphics/finder-get-info-screenshot.png" width="270px" align="right">
+### Default behavior<img src="https://github.com/mhucka/urial/raw/main/.graphics/finder-get-info-screenshot.png" width="300px" align="right">
 
-If the Finder comment for the file is empty, then `urial` will write the URI as the comment. The result will be as shown in the screenshot at right. 
+Without any optional flags or arguments to modify its behavior, this program expects to be given at least two argument values.  The first value should be a URI, and the second value should be the path of a file whose Finder comment should be updated with the given URI.
 
-If the Finder comment is _not_ empty, `urial` will modify the comment to update the substring that has the same type of URI, and then only if `urial` finds such a substring in the Finder comment.  For example, if the file "somefile.md" has a Finder comment with an existing `x-devonthink-item` URI string somewhere inside of it, then the following command,
+If the current Finder comment for the file is empty, then `urial` will write the URI into the Finder comment. The result will be as shown in the screenshot at right.
+
+If the Finder comment is _not_ empty, `urial` will modify the comment to update the substring that has the same kind of URI (meaning, one that uses the same URI scheme), and then only if `urial` finds such a substring in the Finder comment.  For example, if the file "somefile.md" has a Finder comment with an existing `x-devonthink-item` URI string somewhere inside of it, then the following command,
 
 ```sh
 urial  x-devonthink-item://8A1A0F18-0686-802-26F33443  somefile.md
 ```
 
-will rewrite **just the URI part of the comment** to have the new URI given on the command line.
+will make `urial` rewrite **just the URI part of the comment** to be the new URI given on the command line.
 
-If the Finder comment is not empty but also does _not_ contain a URI of the same kind as the one given on the command line, then the Finder comment is not changed, unless a suitable value for the option `--mode` is given (see below).
+If the Finder comment is not empty but also does _not_ contain a URI with the same scheme as the one given on the command line, then the Finder comment is not changed, unless a suitable value for the option `--mode` is given (see below).
 
-`urial` users regular expression pattern matching to find the same kind of URI as the value you provide on the command line, to make it more robust against accidentally matching other URIs that may exist in a Finder comment. So, for example, If you supply a URI that has a `x-devonthink-item` scheme type, it will _look_ only for `x-devonthink-item` URIs and will not match other URIs; if you supply a URI that has a `zotero` scheme type, it will look only for `zotero` URIs; and so on.
+`urial` is careful to match based on URI schemes to make it more robust against accidentally matching other URIs that may exist in a Finder comment. So, for example, If you supply a URI that has a `x-devonthink-item` scheme type, it will _look_ only for `x-devonthink-item` URIs and will not match other URIs; if you supply a URI that has a `zotero` scheme type, it will look only for `zotero` URIs; and so on.
+
+
+### URI detection
+
+The full syntax of URIs is complex. The characters that can appear in URIs (according to [RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986)) include periods, semicolons, question marks, dollar signs, exclamation points, parentheses, and more. This makes detecting URIs in plain text difficult, especially if a human wrote the text and they were not careful to delimit the URIs from the rest of the text. For example, URLs for pages in Wikipedia often include parentheses, such as
+
+```text
+https://en.wikipedia.org/wiki/Bracket_(disambiguation)
+```
+
+which can be difficult to extract from surrounding text if it is followed by a character such as a question mark, as in
+
+```text
+Was this from https://en.wikipedia.org/wiki/Bracket_(disambiguation)?
+```
+
+because a question mark is also a valid part of a URI. For an automated parser without natural language understanding, the question mark in the text above could be interpreted as being part of the URI itself (signifying the query part of a URI, albeit an empty query). Other examples of valid but potentially confusing single URIs include the following:
+
+```text
+paparazzi:http://www.google.com
+z39.50s://lx2.loc.gov:210/lcdb?9=84243207
+ldap://[2001:db8::7]/c=GB?a?b
+http://wayback.archive.org/web/*/http://www.alexa.com/topsites
+prefs:root=General&path=VPN/DNS
+```
+
+For these reasons, `urial` by default tries to be intelligent about recognizing URIs in Finder comments by applying the following rules:
+
+1) it will assume that the following characters are not part of a URI if they come at the beginning of something that otherwise looks like a URI: `,` `;` `'` `?` `!` `$` `)` `]`
+2) it will assume that the following characters are not part of a URI if they come at the end of something that otherwise looks like a URI: `.` `,` `:` `;` `'` `?` `!` `$` `(` `[`
+
+These behaviors are meant to make `urial` more likely to match one's intuition about how it should recognize URIs embedded in text comments, but it also means it may not conform to standards. To disable this behavior, use the <nobr><code>--strict</code></nobr> option; then, `urial` will not handle these characters specially, and URIs will be assumed to be separated from text only by (1) whitespace characters and (2) the following other characters: `<` `>` `^` `"` <code>&#96;</code> `{` `}`
+
 
 
 ### Options for handling existing Finder comments
@@ -115,6 +150,17 @@ to just
 assuming that `URI` is the URI given to urial on the command line.  If you want to update the URI to a new value and leave the other comment text in place, use `--mode update` or simply don't provide a value for `--mode` (because `update` is the default action).
 
 
+### Printing the Finder comment
+
+Instead of writing a Finder comment, urial can be used to print an existing comment via the `--show` option. The `--show` option takes a required argument, which can be either `comment` or `uri`; the former causes urial to print the entire Finder comment of the file, and the latter just the URI(s) found in the comment. For example, given a file named "somefile.md", the following command will extract and print any URI(s) found anywhere in the Finder comment text:
+
+```sh
+urial --show uri somefile.md
+```
+
+If more than one URI is found in the Finder comment, they will be printed separately to the terminal, one per line.
+
+
 ### Additional command-line options
 
 If given the `--version` option, this program will print the version and other information, and exit without doing anything else.
@@ -128,15 +174,18 @@ If given the `--debug` argument, this program will output a detailed trace of wh
 
 The following table summarizes all the command line options available.
 
-| Short&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   | Long&nbsp;form&nbsp;opt&nbsp;&nbsp;&nbsp;&nbsp; | Meaning | Default |  |
+| Short&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   | Long&nbsp;form&nbsp;opt&nbsp;&nbsp; | Meaning | Default |  |
 |---------- |-------------------|--------------------------------------|---------|---|
-| `-G`      | `--no-gui`        | Print errors & warnings to terminal; don't use GUI dialogs | Use GUI dialogs | |
 | `-h`      | `--help`          | Display help text and exit | | |
 | `-m`      | `--mode`_M_       | Approach for handling existing comments | `update` | ⚑ |
-| `-V`      | `--version`       | Display program version info and exit | | |
+| `-p`      | `--print`_P_      | Print file's Finder comment or URIs found therein, and exit  | | ★ |
+| `-s`      | `--strict`        | Be strict about URI syntax | Don't be pedantic | |
+| `-U`      | `--no-gui`        | Print errors & warnings to terminal | Use GUI dialogs | |
+| `-V`      | `--version`       | Display program version info, and exit | | |
 | `-@`_OUT_ | `--debug`_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
 
 ⚑ &nbsp; Available values are `append`, `overwrite`, and `update`.<br>
+★ &nbsp; Available values are `comment` and `uri`.<br>
 ⬥ &nbsp; To write to the console, use the character `-` as the value of _OUT_; otherwise, _OUT_ must be the name of a file where the output should be written.<br>
 
 
@@ -169,4 +218,5 @@ Urial makes use of numerous open-source packages, without which Urial could not 
 * [plac](http://micheles.github.io/plac/) &ndash; a command line argument parser
 * [setuptools](https://github.com/pypa/setuptools) &ndash; library for `setup.py`
 * [Sidetrack](https://github.com/caltechlibrary/sidetrack) &ndash; simple debug logging/tracing package
+* [uritools](https://github.com/tkem/uritools/) &ndash; functions for parsing, classifying, and composing URIs
 * [wheel](https://pypi.org/project/wheel/) &ndash; setuptools extension for building wheels
