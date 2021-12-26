@@ -24,22 +24,32 @@ if sys.version_info <= (3, 8):
 # Note: this code uses lazy loading.  Additional imports are made below.
 import plac
 from   sidetrack import set_debug, log
+from   uritools import urisplit, uricompose
+
+
+# Constants.
+# .............................................................................
+
+_SAFE_SEPARATORS = r'"\<>^`{}'
+_NON_URI_BEGIN = r",;'?!$)]"
+_NON_URI_END = r".,:;'?!$(["
 
 
 # Main body.
 # .............................................................................
 
 @plac.annotations(
-    mode    = ('how to handle existing comment (see help for info)', 'option', 'm'),
-    show    = ('print the Finder comment or the URI, and exit',      'option', 's'),
-    no_gui  = ('do not use macOS GUI dialogs for error messages',    'flag',   'U'),
-    version = ('print program version info and exit',                'flag',   'V'),
-    debug   = ('log debug output to "OUT" ("-" is console)',         'option', '@'),
-    args    = 'a URI followed by a file name',
+    mode       = ('how to handle existing comment (see help for info)',   'option', 'm'),
+    print_     = ('print the Finder comment or the URI, and exit',        'option', 'p'),
+    strict     = ('be strict about recognizing URIs (see help for info)', 'flag',   's'),
+    no_gui     = ('do not use macOS GUI dialogs for error messages',      'flag',   'U'),
+    version    = ('print program version info and exit',                  'flag',   'V'),
+    debug      = ('log debug output to "OUT" ("-" is console)',           'option', '@'),
+    args       = 'a URI followed by a file name',
 )
 
-def main(mode = 'M', show = 'S', no_gui = False, version = False,
-         debug = 'OUT', *args):
+def main(mode = 'M', print_ = 'P', strict = False, no_gui = False,
+         version = False, debug = 'OUT', *args):
     '''Add or update a URI in a Finder comment.
 
 This program expects to be given at least two argument values.  The first
@@ -61,12 +71,61 @@ URI inside of it, then the following command,
 
   urial  x-devonthink-item://8A1A0F18-068680226F3  somefile.md
 
-will rewrite just the URI part of the comment to have the new URI given on the
-command line.
+will cause urial to look for the first "x-devonthink-item" URI it finds in the
+Finder comment and replacing it with the new value.
 
 If the current Finder comment is not empty but also does not contain a URI of
 the same kind as the one given on the command line, then the Finder comment is
 not changed unless a suitable value for the option --mode is given (see below).
+
+URI detection
+~~~~~~~~~~~~~
+
+The full syntax of URIs is complex. The characters that can appear in URIs
+(according to RFC 3986) include periods, semicolons, question marks, dollar
+signs, exclamation points, parentheses, and more. This makes detecting URIs
+in plain text difficult, especially if a human wrote the text and they were
+not careful to delimit the URIs from the rest of the text. For example, URLs
+for pages in Wikipedia often include parentheses, such as
+
+  https://en.wikipedia.org/wiki/Bracket_(disambiguation)
+
+which can be difficult to extract from surrounding text if it is followed by
+a character such as a question mark, as in
+
+  Was this part of https://en.wikipedia.org/wiki/Bracket_(disambiguation)?
+
+because a question mark is also a valid part of a URI. For an automated
+parser without natural language understanding, the question mark in the text
+above could be interpreted as being part of the URI itself (signifying the
+query part of a URI, albeit an empty query). Other examples of valid but
+potentially confusing single URIs include the following:
+
+  paparazzi:http://www.google.com
+  http://wayback.archive.org/web/*/http://www.alexa.com/topsites
+  ldap://[2001:db8::7]/c=GB?a?b
+  z39.50s://lx2.loc.gov:210/lcdb?9=84243207
+  prefs:root=General&path=VPN/DNS
+
+For these reasons, urial by default tries to be intelligent about recognizing
+URIs in Finder comments by applying the following rules:
+
+  1) it will assume that the following characters are not part of a URI if
+     they come at the beginning of something that otherwise looks like a URI:
+
+     , ; ' ? ! $ ) ]
+
+  2) it will assume that the following characters are not part of a URI if
+     they come at the end of something that otherwise looks like a URI:
+
+     . , : ; ' ? ! $ ( [
+
+These behaviors are meant to make urial more likely to match one's intuition
+about how it should recognize URIs, but it also means it may not conform to
+standards. To disable this behavior, use the --strict option; then, urial
+will not handle these characters specially, and URIs will be assumed to be
+separated from text only by (1) whitespace characters and (2) the following
+other characters: < > ^ " ` { }
 
 Options for handling existing Finder comments
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -105,14 +164,14 @@ Printing the Finder comment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Instead of writing a Finder comment, urial can be used to print an existing
-comment via the --show option. The --show option takes a required argument,
+comment via the --print option. The --print option takes a required argument,
 which can be either "comment" or "uri"; the former causes urial to print the
 entire Finder comment of the file, and the latter just the URI(s) found in
 the comment. For example, given a file named "somefile.md", the following
 command will extract and print any URI(s) found anywhere in the Finder
 comment text:
 
-  urial --show uri somefile.md
+  urial --print uri somefile.md
 
 If more than one URI is found in the Finder comment, they will be printed
 separately to the terminal, one per line.
@@ -153,18 +212,18 @@ Command-line arguments summary
     if not mode in ['update', 'append', 'overwrite']:
         stop(f'Unrecognized mode value: {mode}')
 
-    show = show.lower() if show != 'S' else False
+    show = print_.lower() if print_ != 'P' else False
     if show:
         if show not in ['comment', 'uri']:
-            stop(f'Invalid option value for --show: {show}. The valid options'
-                 + ' are "comment" and "uri".')
+            stop(f'Invalid option value for --print: {print_}. The valid'
+                 + ' options are "comment" and "uri".')
         file = args[0]
     else:
         if len(args) < 2:
             stop('Must be given at least two arguments: a URI and a file path.')
         uri = args[0]
         file = args[1]
-        scheme, rest = parsed_uri(uri)
+        scheme = urisplit(uri).scheme
         if not scheme:
             stop(f'Could not interpret argument value "' + uri + '" as a URI.')
 
@@ -187,7 +246,7 @@ Command-line arguments summary
         if show:
             if show == 'comment':
                 print(comment)
-            elif (uris := uris_in_text(comment)):
+            elif (uris := uris_in_text(comment, strict)):
                 print(r'\n'.join(uris))
         elif not comment:
             log('file has no comment, so writing ' + uri)
@@ -197,29 +256,22 @@ Command-line arguments summary
             log('overwriting existing Finder comment with ' + uri)
             finder_file.comment.set(uri)
         elif uri in comment:
-            log('comment already contains the same URI -- nothing to do')
-        elif scheme + '://' in comment:
-            # The comment has a different URI with the same scheme.
-            log('comment has an existing URI with the same scheme')
-            if mode == 'append':
-                log('appending to existing Finder comment the string ' + uri)
-                finder_file.comment.set(comment + '\n' + uri)
-            else:
-                # Mode is update.
-                import re
-                regex = r'(.*?)(?!' + scheme + ')?' + scheme + '://' + '([^\s".,;<>(){}\[\]]+)(.*?)'
-                s = re.search(regex, comment, re.IGNORECASE)
-                new_comment = s.group(1) + scheme + '://' + rest + s.group(3)
-                log('writing new comment: ' + new_comment)
-                finder_file.comment.set(new_comment)
+            log('comment already contains the same URI: ' + uri)
         elif mode == 'append':
-            # Didn't find a URI, and not doing overwrite => append.
             log('appending to existing Finder comment the string ' + uri)
             finder_file.comment.set(comment + '\n' + uri)
         else:
-            # Didn't find a URI of the same kind and we're not appending.
-            log('nothing to do')
-
+            # Check if there's a URI with the same scheme in the comment.
+            uris = uris_in_text(comment, strict)
+            same_scheme_uris = [u for u in uris if urisplit(u).scheme == scheme]
+            if any(same_scheme_uris):
+                log(f'replacing {same_scheme_uris[0]} with {uri}')
+                parts = comment.partition(same_scheme_uris[0])
+                new_comment = parts[0] + uri + parts[2]
+                finder_file.comment.set(new_comment)
+            else:
+                # Didn't find a URI of the same kind and we're not appending.
+                log('nothing to do')
     except KeyboardInterrupt:
         log(f'user interrupted program -- exiting')
         sys.exit(0)
@@ -235,31 +287,36 @@ Command-line arguments summary
 
 # Miscellaneous helpers.
 # .............................................................................
+# The syntax of URIs is defined in https://www.rfc-editor.org/rfc/rfc3986.
 
-# FIXME the only reason for the split is to get the scheme in another part of
-# the code above, but if I return a single uri instead, then the code above
-# could take do a split on :// to get the scheme pretty easily.
-
-def uris_in_text(text):
-    import re
-    uris = []
-    split_chars = '!"#$%\'()*+.,;<>@[]^`{}'
-    splitter = str.maketrans(split_chars, ' '*len(split_chars))
-    chunks = str.translate(text, splitter).split(' ')
-    for chunk in filter(None, chunks):
-        left, right = parsed_uri(chunk)
-        if left:
-            uris.append(left + '://' + right)
-    return uris
+def unsurrounded(text):
+    '''Remove matched parentheses or brackets surrounding the text.'''
+    # Loop in order to handle nested cases.
+    while text.startswith('(') or text.startswith('['):
+        if text.startswith('(') and text.endswith(')'):
+            text = text[1:-1]
+        elif text.startswith('[') and text.endswith(']'):
+            text = text[1:-1]
+        else:
+            break
+    return text
 
 
-def parsed_uri(uri):
-    if '://' not in uri:
-        return None, None
-    parts = uri.split('://')
-    if not all(len(part) > 0 for part in parts):
-        return None, None
-    return parts[0], parts[1]
+def uris_in_text(text, strict = False):
+    # Do a first pass of this in case the whole text is surrounded.
+    text = unsurrounded(text)
+    # Approach: replace every non-URI delimiter by a space, use split(' ') to
+    # bust up the string into chunks, then try to parse each chunk as a URI.
+    import string
+    separators = string.whitespace + _SAFE_SEPARATORS
+    space_replacements = str.maketrans(separators, ' '*len(separators))
+    chunks = str.translate(text, space_replacements).split(' ')
+    # Parens & brackets are allowed inside URIs, but if a chunk is surrounded
+    # by them, then it's clear they're not part of the URI itself.
+    chunks = [unsurrounded(chunk) for chunk in chunks]
+    if not strict:
+        chunks = [c.lstrip(_NON_URI_BEGIN).rstrip(_NON_URI_END) for c in chunks]
+    return [chunk for chunk in chunks if urisplit(chunk).scheme]
 
 
 def inform(msg, no_gui):
@@ -267,13 +324,12 @@ def inform(msg, no_gui):
     if no_gui:
         print('‼️  ' + msg)
     else:
-        from urial import __program__
         from osax import OSAX
         sa = OSAX("StandardAdditions", name = "System Events")
         sa.activate()
-        # The text below uses Unicode characters to get bold text.
-        sa.display_dialog('𝗨𝗿𝗶𝗮𝗹 𝗲𝗿𝗿𝗼𝗿:\n\n' + msg,
-                          buttons = ["OK"], default_button = 'OK', with_icon = 0)
+        # The text below uses Unicode characters to produce bold text.
+        sa.display_dialog('𝗨𝗿𝗶𝗮𝗹 𝗲𝗿𝗿𝗼𝗿:\n\n' + msg, buttons = ["OK"],
+                          default_button = 'OK', with_icon = 0)
 
 
 # Main entry point.
