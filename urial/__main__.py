@@ -52,13 +52,17 @@ def main(mode = 'M', print_ = 'P', strict = False, no_gui = False,
          version = False, debug = 'OUT', *args):
     '''Add or update a URI in a Finder comment.
 
-This program expects to be given at least two argument values.  The first
-value is taken to be a string containing a URI, and the second value is the
-path of a file whose Finder comment should be updated with the given string.
-Optional arguments begin with dashes and modify the program's behavior.
+This program expects to be given one or more arguments on the command line, as
+described below. Optional arguments begin with dashes and modify the program's
+behavior.
 
 Default behavior
 ~~~~~~~~~~~~~~~~
+
+Without any optional flags or arguments to modify its behavior, this program
+expects to be given at least two argument values.  The first value should be
+a URI, and the second value should be the path of a file whose Finder comment
+should be updated with the given URI.
 
 If the current Finder comment for the file is empty, then this program will
 write the URI into the Finder comment.
@@ -146,7 +150,7 @@ The --mode option can be used to change this program's behavior, as follows:
              the comment string) do nothing
 
 Note that the behavior of "--mode overwrite" is to replace unconditionally the
-entire Finder comment.  In other words, "-- mode overwrite" will change a
+entire Finder comment. In other words, "-- mode overwrite" will change a
 Finder comment such as
 
     Blah blah blah. URI. More blah blah blah.
@@ -155,7 +159,7 @@ to just
 
     URI
 
-assuming that "URI" is the URI given to urial on the command line.  If you want
+assuming that "URI" is the URI given to urial on the command line. If you want
 to update the URI to a new value and leave the other comment text in place,
 use "--mode update" or simply don't provide a value for --mode (because
 update is the default action).
@@ -183,7 +187,7 @@ If given the --version option, this program will print the version and other
 information, and exit without doing anything else.
 
 By default, this program will use macOS dialogs to report errors or other
-issues.  The option --no-gui will make it print messages only on the command
+issues. The option --no-gui will make it print messages only on the command
 line, without using GUI dialogs.
 
 If given the --debug argument, this program will output a detailed trace of
@@ -336,7 +340,7 @@ def inform(msg, no_gui):
 # .............................................................................
 
 # The following entry point definition is for the console_scripts keyword
-# option to setuptools.  The entry point for console_scripts has to be a
+# option to setuptools. The entry point for console_scripts has to be a
 # function that takes zero arguments.
 def console_scripts_main():
     plac.call(main)
