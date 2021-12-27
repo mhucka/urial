@@ -2,7 +2,7 @@
 
 ## ★ Version 1.0.0 ★
 
-First public release. This version has no functional changes compared to 0.0.4, but the release adds a ready-to-run binary executable for macOS.
+First public release. This version improves parsing of URIs in Finder comments, and the release now includes ready-to-run binary executables for macOS.
 
 
 ## ★ Version 0.0.4 ★
