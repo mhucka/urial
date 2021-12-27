@@ -86,49 +86,48 @@ URI detection
 
 The full syntax of URIs is complex. The characters that can appear in URIs
 (according to RFC 3986) include periods, semicolons, question marks, dollar
-signs, exclamation points, parentheses, and more. This makes detecting URIs
-in plain text difficult, especially if a human wrote the text and they were
-not careful to delimit the URIs from the rest of the text. For example, URLs
-for pages in Wikipedia often include parentheses, such as
+signs, exclamation points, parentheses, square brackets, and more. Here are
+some examples of valid yet potentially surprising URIs:
 
+  paparazzi:http://www.caltech.edu
   https://en.wikipedia.org/wiki/Bracket_(disambiguation)
-
-which can be difficult to extract from surrounding text if it is followed by
-a character such as a question mark, as in
-
-  Was this part of https://en.wikipedia.org/wiki/Bracket_(disambiguation)?
-
-because a question mark is also a valid part of a URI. For an automated
-parser without natural language understanding, the question mark in the text
-above could be interpreted as being part of the URI itself (signifying the
-query part of a URI, albeit an empty query). Other examples of valid but
-potentially confusing single URIs include the following:
-
-  paparazzi:http://www.google.com
-  http://wayback.archive.org/web/*/http://www.alexa.com/topsites
-  ldap://[2001:db8::7]/c=GB?a?b
   z39.50s://lx2.loc.gov:210/lcdb?9=84243207
+  ldap://[2001:db8::7]/c=GB?a?b
+  http://wayback.archive.org/web/*/http://www.alexa.com/topsites
   prefs:root=General&path=VPN/DNS
 
-For these reasons, urial by default tries to be intelligent about recognizing
+URIs are difficult to detect when they're embedded in human language
+text. One can't assume that URIs are delineated by whitespace characters,
+because a human or software tool may have written a Finder comment without
+being careful to delimit URIs from the rest of the text. Even worse, URI
+syntax according to RFC 3986 allows for a scheme name followed by an empty
+path, which means that in the following text,
+
+  Original source: x-devonthink-item://40C401DB-8A1D-4B1D-032FB186D85A.
+
+a strict interpretation requires that the string "source:" is considered a
+valid URI. (In addition, the trailing period is, strictly speaking, part of
+the second URI). This is probably not what the author intended.
+
+These strict interpretations are usually unhelpful in urial's domain of
+application. For this reason, urial tries to be intelligent about recognizing
 URIs in Finder comments by applying the following rules:
 
   1) it will assume that the following characters are not part of a URI if
-     they come at the beginning of something that otherwise looks like a URI:
-
-     , ; ' ? ! $ ) ]
-
-  2) it will assume that the following characters are not part of a URI if
      they come at the end of something that otherwise looks like a URI:
-
      . , : ; ' ? ! $ ( [
 
-These behaviors are meant to make urial more likely to match one's intuition
-about how it should recognize URIs, but it also means it may not conform to
-standards. To disable this behavior, use the --strict option; then, urial
-will not handle these characters specially, and URIs will be assumed to be
-separated from text only by (1) whitespace characters and (2) the following
-other characters: < > ^ " ` { }
+  2) it will assume that ) and ] characters at the end of something that
+     looks like a URI are not part of the URI if there is no opening ( or [
+     character in the rest of the URI
+
+  3) it will ignore strings that could be URIs with empty path components
+     (e.g., "something:", "abc-def:", etc.)
+
+To disable this behavior, use the --strict option; then, the program will
+assume that URIs are separated from text only by (1) whitespace characters
+and (2) the characters < > ^ " ` { and }, and it will not ignore potential
+URIs with empty paths.
 
 Options for handling existing Finder comments
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
