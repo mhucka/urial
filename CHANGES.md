@@ -1,5 +1,10 @@
 # Change log for Urial
 
+## ★ Version 1.0.0 ★
+
+First public release. This version has no functional changes compared to 0.0.4, but the release adds a ready-to-run binary executable for macOS.
+
+
 ## ★ Version 0.0.4 ★
 
 This release updates `requirements.txt` for some missing dependencies.
