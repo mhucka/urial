@@ -249,7 +249,7 @@ Command-line arguments summary
             if show == 'comment':
                 print(comment)
             elif (uris := uris_in_text(comment, strict)):
-                print(r'\n'.join(uris))
+                print('\n'.join(uris))
         elif not comment:
             log('file has no comment, so writing ' + uri)
             finder_file.comment.set(uri)
