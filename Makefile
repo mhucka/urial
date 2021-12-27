@@ -133,10 +133,10 @@ make-zip: run-pyinstaller
 	cat <<- EOF > $(tmp_file)
 	┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 	┃ This Zip archive file includes a self-contained, runnable ┃
-	┃ version of the program Urial for macOS. To learn        ┃
-	┃ more about Urial, please visit the following site:      ┃
+	┃ version of the program Urial for macOS. To learn more     ┃
+	┃ about Urial, please visit the following site:             ┃
 	┃                                                           ┃
-	┃         https://github.com/$(repo)         ┃
+	┃              https://github.com/mhucka/urial              ┃
 	┃                                                           ┃
 	┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 	EOF
@@ -147,12 +147,12 @@ make-zip: run-pyinstaller
 shiv zipapps: | run-shiv
 
 run-shiv:;
-	@mkdir -p dist
-	dev/scripts/create-pyz dist 3.8.2
-	dev/scripts/create-pyz dist 3.9.5
-	dev/scripts/create-pyz dist 3.10.0
+	@mkdir -p dist/$(os)
+	dev/create-pyz/create-pyz dist/$(os) 3.8.2
+	dev/create-pyz/create-pyz dist/$(os) 3.9.5
+	dev/create-pyz/create-pyz dist/$(os) 3.10.0
 
-build-darwin: dist/$(os)/$(app_name) # $(about-file) $(help-file) # NEWS.html
+#build-darwin: dist/$(os)/$(app_name) # $(about-file) $(help-file) # NEWS.html
 #	packagesbuild dev/installer-builders/macos/packages-config/Urial.pkgproj
 #	mv dist/Urial-mac.pkg dist/Urial-$(release)-macos-$(macos_vers).pkg 
 
