@@ -42,7 +42,7 @@ python3 --version
 (Note: if this is the first time you've run `python3` on your system, macOS will ask if you want to install certain additional software components. Let it do so.) Make sure the version is at least 3.8. Note that if you are running a macOS version before 10.15, you will need to manually install Python 3.8 or later.
 
 Next,
-1. <img align="right" width="350px" src="https://github.com/mhucka/urial/raw/develop/.graphics/shiv-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/urial/releases) and find the **Assets**
+1. <img align="right" width="350px" src="https://github.com/mhucka/urial/raw/main/.graphics/shiv-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/urial/releases) and find the **Assets**
 2. **Download** the ZIP file whose name contains the version of Python on your computer
 3. **Unzip** the file (if your browser didn't unzip it)
 4. **Open the folder** that gets created (it will have a name like `urial-1.0.0-macos-python3.8`)
