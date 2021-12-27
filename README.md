@@ -153,7 +153,7 @@ These strict interpretations are usually unhelpful in Urial's domain of applicat
 2) it will assume that `)` and `]` characters at the end of something that looks like a URI are not part of the URI if there is no opening `(` or `[` character in the rest of the URI
 3) it will ignore strings that could be URIs with empty path components (e.g., `something:`, `abc-def:`, etc.)
 
-To disable this behavior, use the <nobr><code>--strict</code></nobr> option; then, the program will assume that URIs are separated from text only by (1) whitespace characters and (2) the characters `<` `>` `^` `"` <code>&#96;</code> `{` and `}`, and it will not ignore potential URIs with empty paths.
+To disable this behavior, use the <code>--strict</code> option; then, the program will assume that URIs are separated from text only by (1) whitespace characters and (2) the characters `<` `>` `^` `"` <code>&#96;</code> `{` and `}`, and it will not ignore potential URIs with empty paths.
 
 ### Options for handling existing Finder comments
 
@@ -202,7 +202,7 @@ The following table summarizes all the command line options available.
 |---------- |-------------------|--------------------------------------|---------|---|
 | `-h`      | `--help`          | Display help text and exit | | |
 | `-m`      | `--mode`_M_       | Approach for handling existing comments | `update` | ⚑ |
-| `-p`      | `--print`_P_      | Print file's Finder comment or URIs found therein, and exit  | | ★ |
+| `-p`      | `--print`_P_      | Print Finder comment or URIs therein, and exit  | | ★ |
 | `-s`      | `--strict`        | Be strict about URI syntax | Don't be pedantic | |
 | `-U`      | `--no-gui`        | Print errors & warnings to terminal | Use GUI dialogs | |
 | `-V`      | `--version`       | Display program version info, and exit | | |
