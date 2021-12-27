@@ -31,7 +31,6 @@ from   uritools import urisplit, uriunsplit
 # .............................................................................
 
 _NON_URI_CHARS = r'"\<>^`{}|'
-_NON_URI_BEGIN = tuple(r"~`!@#$%^&*()_-+=[]:;'<>?/,.|")
 _NON_URI_END = tuple(r".,:;'?!$([")
 
 
@@ -314,8 +313,7 @@ def extracted_uri(text, strict = False):
     # trickier is that chunks may have URIs nested inside parens or brackets,
     # so we can't blindly just strip chars from the front and back.
     while text and (not text[0].isalpha()
-                    or (not strict
-                        and text.endswith(_NON_URI_END + tuple(')]')))):
+                    or (not strict and text.endswith(_NON_URI_END + (')', ']')))):
         text = unsurrounded(text)
         if not text:
             break
@@ -330,11 +328,9 @@ def extracted_uri(text, strict = False):
     uri = urisplit(text)
     if not uri.scheme:
         return ''
-    # Filter out some additional unwelcome cases.
-    if not strict:
-        if not any([uri.authority, uri.path, uri.query, uri.fragment]):
-            return ''
-    return uriunsplit(uri)
+    if not strict and not any([uri.authority, uri.path, uri.query, uri.fragment]):
+        return ''
+    return text
 
 
 def uris_in_text(text, strict = False):
