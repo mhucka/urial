@@ -24,15 +24,15 @@ if sys.version_info <= (3, 8):
 # Note: this code uses lazy loading.  Additional imports are made below.
 import plac
 from   sidetrack import set_debug, log
-from   uritools import urisplit, uricompose
+from   uritools import urisplit, uriunsplit
 
 
 # Constants.
 # .............................................................................
 
-_SAFE_SEPARATORS = r'"\<>^`{}'
-_NON_URI_BEGIN = r",;'?!$)]"
-_NON_URI_END = r".,:;'?!$(["
+_NON_URI_CHARS = r'"\<>^`{}|'
+_NON_URI_BEGIN = tuple(r"~`!@#$%^&*()_-+=[]:;'<>?/,.|")
+_NON_URI_END = tuple(r".,:;'?!$([")
 
 
 # Main body.
@@ -213,7 +213,7 @@ Command-line arguments summary
         sys.exit(0)
 
     mode = 'update' if mode == 'M' else mode
-    if not mode in ['update', 'append', 'overwrite']:
+    if mode not in ['update', 'append', 'overwrite']:
         stop(f'Unrecognized mode value: {mode}')
 
     show = print_.lower() if print_ != 'P' else False
@@ -296,7 +296,7 @@ Command-line arguments summary
 def unsurrounded(text):
     '''Remove matched parentheses or brackets surrounding the text.'''
     # Loop in order to handle nested cases.
-    while text.startswith('(') or text.startswith('['):
+    while text.startswith(('(', '[')):
         if text.startswith('(') and text.endswith(')'):
             text = text[1:-1]
         elif text.startswith('[') and text.endswith(']'):
@@ -306,21 +306,50 @@ def unsurrounded(text):
     return text
 
 
+def extracted_uri(text, strict = False):
+    # URIs have to begin with a scheme description, which means any character
+    # not allowed in a scheme description can't be part of the start of a URI.
+    # Further, scheme descriptions have to start with an alpha character, so
+    # any other character at the start can be stripped away.  Making this
+    # trickier is that chunks may have URIs nested inside parens or brackets,
+    # so we can't blindly just strip chars from the front and back.
+    while text and (not text[0].isalpha()
+                    or (not strict
+                        and text.endswith(_NON_URI_END + tuple(')]')))):
+        text = unsurrounded(text)
+        if not text:
+            break
+        elif not text[0].isalpha():
+            text = text[1:]
+        elif text.endswith((')', ']')) and not '(' in text and not '[' in text:
+            text = text[:-1]
+        elif not strict and text.endswith(_NON_URI_END):
+            text = text[:-1]
+        else:
+            break
+    uri = urisplit(text)
+    if not uri.scheme:
+        return ''
+    # Filter out some additional unwelcome cases.
+    if not strict:
+        if not any([uri.authority, uri.path, uri.query, uri.fragment]):
+            return ''
+    return uriunsplit(uri)
+
+
 def uris_in_text(text, strict = False):
+    '''Try to find URIs in the given text and return urisplit objects.'''
     # Do a first pass of this in case the whole text is surrounded.
     text = unsurrounded(text)
-    # Approach: replace every non-URI delimiter by a space, use split(' ') to
-    # bust up the string into chunks, then try to parse each chunk as a URI.
+    # 1st replace non-URI special characters like < and > by a space, then
+    # use split(' ') to bust up the text into chunks.
     import string
-    separators = string.whitespace + _SAFE_SEPARATORS
+    separators = string.whitespace + _NON_URI_CHARS
     space_replacements = str.maketrans(separators, ' '*len(separators))
     chunks = str.translate(text, space_replacements).split(' ')
-    # Parens & brackets are allowed inside URIs, but if a chunk is surrounded
-    # by them, then it's clear they're not part of the URI itself.
-    chunks = [unsurrounded(chunk) for chunk in chunks]
-    if not strict:
-        chunks = [c.lstrip(_NON_URI_BEGIN).rstrip(_NON_URI_END) for c in chunks]
-    return [chunk for chunk in chunks if urisplit(chunk).scheme]
+    # Now we have chunks that may be URIs or contain URIs embedded in them.
+    # Examine each chunk and return the URIs found.
+    return list(filter(None, [extracted_uri(chunk, strict) for chunk in chunks]))
 
 
 def inform(msg, no_gui):
