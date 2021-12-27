@@ -32,7 +32,36 @@ Incidentally, the [urial](https://en.wikipedia.org/wiki/Urial) (properly known a
 
 There are multiple ways of installing Urial, ranging from downloading a self-contained, single-file, ready-to-run program, to installing it as a typical Python program using `pip`.  Please choose the alternative that suits you.
 
-### _Alternative 1: installing Urial using `pipx`_
+### _Alternative 1: downloading the ready-to-run program_
+
+A binary, ready-to-run version of `urial` is available that only needs a Python interpreter version 3.8 or higher on your computer. Happily, that's the case for macOS 10.15 and later. To be sure, first check the version of the program `python3` that you get by running the following command in a terminal and inspecting the results:
+```sh
+python3 --version
+```
+
+(Note: if this is the first time you've run `python3` on your system, macOS will ask if you want to install certain additional software components. Let it do so.) Make sure the version is at least 3.8. Note that if you are running a macOS version before 10.15, you will need to manually install Python 3.8 or later.
+
+Next,
+1. <img align="right" width="350px" src="https://github.com/mhucka/urial/raw/develop/.graphics/shiv-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/urial/releases) and find the **Assets**
+2. **Download** the ZIP file whose name contains the version of Python on your computer
+3. **Unzip** the file (if your browser didn't unzip it)
+4. **Open the folder** that gets created (it will have a name like `urial-1.0.0-macos-python3.8`)
+5. Look inside for `urial` and **move it** to a location where you put other command-line programs (such as `/usr/local/bin`). 
+
+If you want to put it in `/usr/local/bin` but that folder does not exist on your computer yet, you can create it by opening a terminal window and running the following command (_prior_ to moving `urial` into `/usr/local/bin`):
+
+```shell
+sudo mkdir /usr/local/bin
+```
+
+The following is an example command that you can type in a terminal to move Urial there:
+
+```shell
+sudo mv urial /usr/local/bin
+```
+
+
+### _Alternative 2: installing Urial using `pipx`_
 
 You can use [pipx](https://pypa.github.io/pipx/) to install Urial. Pipx will install it into a separate Python environment that isolates the dependencies needed by Urial from other Python programs on your system, and yet the resulting `urial` command wil be executable from any shell &ndash; like any normal program on your computer. If you do not already have `pipx` on your system, it can be installed in a variety of easy ways and it is best to consult [Pipx's installation guide](https://pypa.github.io/pipx/installation/) for instructions. Once you have pipx on your system, you can install Urial with the following command:
 ```sh
@@ -42,7 +71,7 @@ pipx install urial
 Pipx can also let you run Urial directly using `pipx run urial`, although in that case, you must always prefix every `urial` command with `pipx run`.  Consult the [documentation for `pipx run`](https://github.com/pypa/pipx#walkthrough-running-an-application-in-a-temporary-virtual-environment) for more information.
 
 
-### _Alternative 2: installing Urial using `pip`_
+### _Alternative 3: installing Urial using `pip`_
 
 The instructions below assume you have a Python 3 interpreter installed on your computer.  Note that the default on macOS at least through 10.14 (Mojave) is Python **2** &ndash; please first install Python version 3 and familiarize yourself with running Python programs on your system before proceeding further.
 
@@ -59,7 +88,7 @@ python3 -m pip install git+https://github.com/mhucka/urial.git
 _If you already installed Urial once before_, and want to update to the latest version, add `--upgrade` to the end of either command line above.
 
 
-### _Alternative 3: installing Urial from sources_
+### _Alternative 4: installing Urial from sources_
 
 If  you prefer to install Urial directly from the source code, you can do that too. To get a copy of the files, you can clone the GitHub repository:
 ```sh
