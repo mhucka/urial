@@ -150,10 +150,10 @@ a strict interpretation requires that the string `source:` is considered a valid
 These strict interpretations are usually unhelpful in Urial's domain of application. For this reason, `urial` tries to be intelligent about recognizing URIs in Finder comments by applying the following rules:
 
 1) it will assume that the following characters are not part of a URI if they come at the end of something that otherwise looks like a URI: `.` `,` `:` `;` `'` `?` `!` `$` `(` `[`
-2) it will assume that `)` and `]` characters at the end of something that looks like a URI are not part of the URI if there is no opening `(` or `[` in the rest of the URI
+2) it will assume that `)` and `]` characters at the end of something that looks like a URI are not part of the URI if there is no opening `(` or `[` character in the rest of the URI
 3) it will ignore strings that could be URIs with empty path components (e.g., `something:`, `abc-def:`, etc.)
 
-The motivation for this behavior is to make the program more likely to match one's intuitions about recognizing URIs embedded in Finder comments, but it also means Urial may not conform to standards. To disable this behavior, use the <nobr><code>--strict</code></nobr> option; then, the program will assume that URIs are separated from text only by (1) whitespace characters and (2) the  characters `<` `>` `^` `"` <code>&#96;</code> `{` and `}`, and it will not ignore potential URIs with empty paths.
+To disable this behavior, use the <nobr><code>--strict</code></nobr> option; then, the program will assume that URIs are separated from text only by (1) whitespace characters and (2) the characters `<` `>` `^` `"` <code>&#96;</code> `{` and `}`, and it will not ignore potential URIs with empty paths.
 
 ### Options for handling existing Finder comments
 
