@@ -1,5 +1,10 @@
 # Change log for Urial
 
+## ★ Version 1.1.0 ★
+
+Add `--mode prepend`, similar to `--mode append` but to prepend the URI to the front of the Finder comment instead of appending it to the end.
+
+
 ## ★ Version 1.0.0 ★
 
 First public release. This version improves parsing of URIs in Finder comments, and the release now includes ready-to-run binary executables for macOS.
