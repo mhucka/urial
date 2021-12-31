@@ -138,6 +138,10 @@ The --mode option can be used to change this program's behavior, as follows:
              given URI to the end of the comment; otherwise (if the comment
              string already contains the URI) do nothing
 
+  prepend:   if the URI is NOT found in the Finder comment string, prepend the
+             given URI to the front of the comment; otherwise (if the comment
+             string already contains the URI) do nothing
+
   overwrite: overwrite the Finder comment completely with the given URI string,
              no matter what the Finder comment string contains (even if it
              already contains the given URI)
@@ -211,7 +215,7 @@ Command-line arguments summary
         sys.exit(0)
 
     mode = 'update' if mode == 'M' else mode
-    if mode not in ['update', 'append', 'overwrite']:
+    if mode not in ['update', 'append', 'prepend', 'overwrite']:
         stop(f'Unrecognized mode value: {mode}')
 
     show = print_.lower() if print_ != 'P' else False
@@ -262,6 +266,9 @@ Command-line arguments summary
         elif mode == 'append':
             log('appending to existing Finder comment the string ' + uri)
             finder_file.comment.set(comment + '\n' + uri)
+        elif mode == 'prepend':
+            log('prepending to existing Finder comment the string ' + uri)
+            finder_file.comment.set(uri + '\n' + comment)
         else:
             # Check if there's a URI with the same scheme in the comment.
             uris = uris_in_text(comment, strict)

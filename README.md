@@ -160,6 +160,7 @@ To disable this behavior, use the <code>--strict</code> option; then, the progra
 The `--mode` option can be used to change the behavior described above. The following are the possible values for this option:
 
 * `append`: in this mode, if the URI is _not_ found in the Finder comment string, `urial` will append the given URI to the end of the comment; otherwise (if the comment string already contains the URI) it will do nothing.
+* `prepend`: in this mode, if the URI is _not_ found in the Finder comment string, `urial` will prepend the given URI to the front of the comment; otherwise (if the comment string already contains the URI) it will do nothing.
 * `overwrite`: the program will overwrite the Finder comment completely with the given URI string, no matter what the Finder comment string contains (even if it already contains the given URI).
 * `update`: (default) if a URI of the same kind exists in the comment, `urial` will replace only the URI portion of the comment string (preserving the rest of the comment string), else (if a URI is NOT found in the comment string) it will do nothing.
 
@@ -208,7 +209,7 @@ The following table summarizes all the command line options available.
 | `-V`      | `--version`       | Display program version info, and exit | | |
 | `-@`_OUT_ | `--debug`_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
 
-⚑ &nbsp; Available values are `append`, `overwrite`, and `update`.<br>
+⚑ &nbsp; Available values are `append`, `prepend`, `overwrite`, and `update`.<br>
 ★ &nbsp; Available values are `comment` and `uri`.<br>
 ⬥ &nbsp; To write to the console, use the character `-` as the value of _OUT_; otherwise, _OUT_ must be the name of a file where the output should be written.<br>
 
