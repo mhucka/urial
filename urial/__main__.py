@@ -214,7 +214,7 @@ Command-line arguments summary
         print_version()
         sys.exit(0)
 
-    mode = 'update' if mode == 'M' else mode
+    mode = 'update' if mode == 'M' else mode.lower()
     if mode not in ['update', 'append', 'prepend', 'overwrite']:
         stop(f'Unrecognized mode value: {mode}')
 
@@ -234,7 +234,7 @@ Command-line arguments summary
             stop(f'Could not interpret argument value "' + uri + '" as a URI.')
 
     if file == '':
-        stop(f'File name is an empty string.')
+        stop(f'File name must not be an empty string.')
     from os.path import exists
     if not exists(file):
         stop(f'File does not appear to exist: {file}')
@@ -289,6 +289,8 @@ Command-line arguments summary
        exception = sys.exc_info()
        details = ''.join(format_exception(*exception))
        stop(f'Encountered error: ' + str(ex) + '\n\n' + details)
+
+    # If we get here, exit normally -------------------------------------------
 
     log('done.')
     sys.exit(0)
