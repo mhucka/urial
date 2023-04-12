@@ -2,7 +2,12 @@
 
 ## ★ Version 1.1.0 ★
 
-Add `--mode prepend`, similar to `--mode append` but to prepend the URI to the front of the Finder comment instead of appending it to the end.
+Changes in this release:
+* Added `--mode prepend`, similar to `--mode append` but to prepend the URI to the front of the Finder comment instead of appending it to the end.
+* Updated versions of dependencies in `requirements.txt`.
+* Added `requirements-dev.txt`.
+* Improved `codemeta.json`.
+* Updated `Makefile`.
 
 
 ## ★ Version 1.0.0 ★

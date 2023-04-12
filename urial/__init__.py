@@ -21,7 +21,7 @@ the file "LICENSE" for more information.
 #  ╰────────────────────── Notice ── Notice ── Notice ─────────────────────╯
 
 __program__     = 'urial'
-__version__     = '1.0.0'
+__version__     = '1.1.0'
 __description__ = 'URI Addition tooL: add/update a URI in a macOS Finder comment'
 __url__         = 'https://github.com/mhucka/urial'
 __author__      = 'Michael Hucka'
