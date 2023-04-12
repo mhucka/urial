@@ -148,9 +148,10 @@ shiv zipapps: | run-shiv
 
 run-shiv:;
 	@mkdir -p dist/$(os)
-	dev/create-pyz/create-pyz dist/$(os) 3.8.2
-	dev/create-pyz/create-pyz dist/$(os) 3.9.5
-	dev/create-pyz/create-pyz dist/$(os) 3.10.0
+	dev/create-pyz/create-pyz dist/$(os) 3.8.16
+	dev/create-pyz/create-pyz dist/$(os) 3.9.16
+	dev/create-pyz/create-pyz dist/$(os) 3.10.10
+	dev/create-pyz/create-pyz dist/$(os) 3.11.2
 
 #build-darwin: dist/$(os)/$(app_name) # $(about-file) $(help-file) # NEWS.html
 #	packagesbuild dev/installer-builders/macos/packages-config/Urial.pkgproj
