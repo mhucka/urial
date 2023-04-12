@@ -201,12 +201,12 @@ The following table summarizes all the command line options available.
 | Short&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   | Long&nbsp;form&nbsp;opt&nbsp;&nbsp; | Meaning | Default |  |
 |---------- |-------------------|--------------------------------------|---------|---|
 | `-h`      | `--help`          | Display help text and exit | | |
-| `-m`      | `--mode`_M_       | Approach for handling existing comments | `update` | ⚑ |
-| `-p`      | `--print`_P_      | Print Finder comment or URIs therein, and exit  | | ★ |
+| `-m`      | `--mode` _M_      | Approach for handling existing comments | `update` | ⚑ |
+| `-p`      | `--print` _P_     | Print Finder comment or URIs therein, and exit  | | ★ |
 | `-s`      | `--strict`        | Be strict about URI syntax | Don't be pedantic | |
 | `-U`      | `--no-gui`        | Print errors & warnings to terminal | Use GUI dialogs | |
 | `-V`      | `--version`       | Display program version info, and exit | | |
-| `-@`_OUT_ | `--debug`_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
+| `-@`_OUT_ | `--debug` _OUT_   | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
 
 ⚑ &nbsp; Available values are `append`, `prepend`, `overwrite`, and `update`.<br>
 ★ &nbsp; Available values are `comment` and `uri`.<br>
