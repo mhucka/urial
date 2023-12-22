@@ -1,8 +1,17 @@
 # Change log for Urial
 
+## ★ Version 1.1.1 ★
+
+Changes in this release:
+
+* Updated dependencies.
+* Updated format of `CITATION.cff`
+
+
 ## ★ Version 1.1.0 ★
 
 Changes in this release:
+
 * Added `--mode prepend`, similar to `--mode append` but to prepend the URI to the front of the Finder comment instead of appending it to the end.
 * Updated versions of dependencies in `requirements.txt`.
 * Added `requirements-dev.txt`.

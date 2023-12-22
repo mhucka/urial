@@ -3,9 +3,9 @@
     "@type": "SoftwareSourceCode",
     "name": "urial",
     "description": "URI Additional tooL: add/update URIs in Finder comments",
-    "version": "1.1.0",
-    "softwareVersion": "1.1.0",
-    "datePublished": "2023-04-12",
+    "version": "1.1.1",
+    "softwareVersion": "1.1.1",
+    "datePublished": "2023-12-22",
     "author": [
         {
             "@type": "Person",
@@ -54,7 +54,7 @@
     "programmingLanguage": {
         "@type": "ComputerLanguage",
         "name": "Python",
-        "version": "3.8",
+        "version": "3.9",
         "url": "https://www.python.org/"
     },
     "developmentStatus": "active",
