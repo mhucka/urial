@@ -3,8 +3,8 @@
     "@type": "SoftwareSourceCode",
     "name": "urial",
     "description": "URI Additional tooL: add/update URIs in Finder comments",
-    "version": "1.1.1",
-    "softwareVersion": "1.1.1",
+    "version": "1.1.2",
+    "softwareVersion": "1.1.2",
     "datePublished": "2023-12-22",
     "author": [
         {

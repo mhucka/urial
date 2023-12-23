@@ -8,7 +8,7 @@ authors:
 abstract: Add/update URIs in macOS Finder comments.
 repository-code: "https://github.com/mhucka/urial"
 type: software
-version: 1.1.1
+version: 1.1.2
 license-url: "https://github.com/mhucka/urial/blob/main/LICENSE"
 keywords:
   - macOS

@@ -1,5 +1,10 @@
 # Change log for Urial
 
+## ★ Version 1.1.2 ★
+
+This release fixes a bug in the arguments to the `OSAX` constructor, which takes different arguments in the latest release of the `appscript` package.
+
+
 ## ★ Version 1.1.1 ★
 
 Changes in this release:
