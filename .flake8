@@ -1,4 +1,4 @@
-# Summary: Project-wide Flake8 configuration.                  *- conf-toml -*-
+# Summary: Project-wide Flake8 configuration.           -*- mode: conf-toml -*-
 #
 # Note: as of version 4.0, flake8 does NOT read global configuration files
 # from ~/.flake8 or ~/.config/flake8.  If you had such a config file of your
