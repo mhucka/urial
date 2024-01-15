@@ -1,30 +1,23 @@
 '''
-urial: URI Addition tooL
+Urial: URI Addition tooL
 
-Authors
--------
+Copyright 2024 Michael Hucka.
 
-Michael Hucka <mhucka@caltech.edu> -- Caltech Library
-
-Copyright
----------
-
-Copyright (c) 2021 by Michael Hucka and the California Institute of Technology.
-This code is open-source software released under a 3-clause BSD license.
-Please see the file "LICENSE" for more information.
+Licensed under the MIT License – see file "LICENSE" in the project website.
+For more information, please visit https://github.com/mhucka/urial
 '''
 
 import sys
-if sys.version_info <= (3, 8):
-    print('urial requires Python version 3.8 or higher,')
-    print('but the current version of Python is ' +
-          str(sys.version_info.major) + '.' + str(sys.version_info.minor) + '.')
+if sys.version_info <= (3, 9):
+    print('Urial requires Python version 3.9 or higher,')
+    print('but the current version of Python is '
+          + str(sys.version_info.major) + '.' + str(sys.version_info.minor) + '.')
     exit(1)
 
 # Note: this code uses lazy loading.  Additional imports are made below.
 import plac
 from   sidetrack import set_debug, log
-from   uritools import urisplit, uriunsplit
+from   uritools import urisplit
 
 
 # Constants.
@@ -38,15 +31,14 @@ _NON_URI_END = tuple(r".,:;'?!$([")
 # .............................................................................
 
 @plac.annotations(
-    mode       = ('how to handle existing comment (see help for info)',   'option', 'm'),
-    print_     = ('print the Finder comment or the URI, and exit',        'option', 'p'),
-    strict     = ('be strict about recognizing URIs (see help for info)', 'flag',   's'),
-    no_gui     = ('do not use macOS GUI dialogs for error messages',      'flag',   'U'),
-    version    = ('print program version info and exit',                  'flag',   'V'),
-    debug      = ('log debug output to "OUT" ("-" is console)',           'option', '@'),
-    args       = 'a URI followed by a file name',
+    mode    = ('how to handle existing comment (see help for info)'   , 'option', 'm'),
+    print_  = ('print the Finder comment or the URI, and exit'        , 'option', 'p'),
+    strict  = ('be strict about recognizing URIs (see help for info)' , 'flag'  , 's'),
+    no_gui  = ('do not use macOS GUI dialogs for error messages'      , 'flag'  , 'U'),
+    version = ('print program version info and exit'                  , 'flag'  , 'V'),
+    debug   = ('log debug output to "OUT" ("-" is console)'           , 'option', '@'),
+    args    = 'a URI followed by a file name',
 )
-
 def main(mode = 'M', print_ = 'P', strict = False, no_gui = False,
          version = False, debug = 'OUT', *args):
     '''Add or update a URI in a Finder comment.
@@ -201,8 +193,8 @@ Command-line arguments summary
 '''
 
     # Define shortcut functions for common user feedback actions.
-    def alert(msg): inform(msg, no_gui)
-    def stop(msg): inform(msg, no_gui), sys.exit(1)
+    def alert(msg): inform(msg, no_gui)               # noqa: #704
+    def stop(msg): inform(msg, no_gui), sys.exit(1)   # noqa: #704
 
     # Process arguments & handle early exits ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -222,7 +214,7 @@ Command-line arguments summary
     if show:
         if show not in ['comment', 'uri']:
             stop(f'Invalid option value for --print: {print_}. The valid'
-                 + ' options are "comment" and "uri".')
+                 ' options are "comment" and "uri".')
         file = args[0]
     else:
         if len(args) < 2:
@@ -231,10 +223,10 @@ Command-line arguments summary
         file = args[1]
         scheme = urisplit(uri).scheme
         if not scheme:
-            stop(f'Could not interpret argument value "' + uri + '" as a URI.')
+            stop(f'Could not interpret argument value "{uri}" as a URI.')
 
     if file == '':
-        stop(f'File name must not be an empty string.')
+        stop('File name must not be an empty string.')
     from os.path import exists
     if not exists(file):
         stop(f'File does not appear to exist: {file}')
@@ -282,13 +274,13 @@ Command-line arguments summary
                 # Didn't find a URI of the same kind and we're not appending.
                 log('nothing to do')
     except KeyboardInterrupt:
-        log(f'user interrupted program -- exiting')
+        log('user interrupted program -- exiting')
         sys.exit(0)
-    except Exception as ex:
-       from traceback import format_exception
-       exception = sys.exc_info()
-       details = ''.join(format_exception(*exception))
-       stop(f'Encountered error: ' + str(ex) + '\n\n' + details)
+    except Exception as ex:             # noqa: PIE786
+        from traceback import format_exception
+        exception = sys.exc_info()
+        details = ''.join(format_exception(*exception))
+        stop('Encountered error: ' + str(ex) + '\n\n' + details)
 
     # If we get here, exit normally -------------------------------------------
 
@@ -327,7 +319,7 @@ def extracted_uri(text, strict = False):
             break
         elif not text[0].isalpha():
             text = text[1:]
-        elif text.endswith((')', ']')) and not '(' in text and not '[' in text:
+        elif text.endswith((')', ']')) and '(' not in text and '[' not in text:
             text = text[:-1]
         elif not strict and text.endswith(_NON_URI_END):
             text = text[:-1]
@@ -378,6 +370,7 @@ def inform(msg, no_gui):
 def console_scripts_main():
     plac.call(main)
 
+
 # The following allows users to invoke this using "python3 -m urial" and also
 # pass it an argument of "help" to get the help text.
 if __name__ == '__main__':
@@ -385,11 +378,3 @@ if __name__ == '__main__':
         plac.call(main, ['-h'])
     else:
         plac.call(main)
-
-
-# For Emacs users
-# .............................................................................
-# Local Variables:
-# mode: python
-# python-indent-offset: 4
-# End:
