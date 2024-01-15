@@ -3,7 +3,7 @@
 # @brief   Makefile for some steps in creating new releases on GitHub
 # @date    2021-10-16
 # @license Please see the file named LICENSE in the project directory
-# @website https://github.com/caltechlibrary/urial
+# @website https://github.com/mhucka/urial
 # =============================================================================
 
 .ONESHELL: 				# Run all commands in the same shell.

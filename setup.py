@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
-# =============================================================================
-# @file    setup.py
-# @brief   Installation setup file
-# @author  Michael Hucka <mhucka@caltech.edu>
-# @license Please see the file named LICENSE in the project directory
-# @website https://github.com/mhucka/urial
+# Summary: installation setup file for Urial.
 #
 # Note: configuration metadata is maintained in setup.cfg.  This file exists
 # primarily to hook in setup.cfg and requirements.txt.
-#
-# =============================================================================
+
+# Copyright 2024 Michael Hucka.
+# License: MIT License – see file "LICENSE" in the project website.
+# Website: https://github.com/mhucka/urial
 
 import os
 from   os import path

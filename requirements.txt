@@ -1,9 +1,8 @@
-# =============================================================================
-# @file    requirements.txt
-# @brief   Python dependencies for Urial
-# @license Please see the file named LICENSE in the project directory
-# @website https://github.com/mhucka/urial
-# =============================================================================
+# Summary: Python dependencies for Urial
+#
+# Copyright 2024 Michael Hucka.
+# License: MIT License – see file "LICENSE" in the project website.
+# Website: https://github.com/mhucka/urial
 
 appscript     == 1.2.2
 plac          == 1.4.2

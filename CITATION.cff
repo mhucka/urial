@@ -1,17 +1,19 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
-title: "Urial (URI Addition tooL)"
+message: "If you use this software, please cite it using the metadata from this file."
 authors:
   - family-names: Hucka
     given-names: Michael
+    email: mhucka@caltech.edu
     orcid: https://orcid.org/0000-0001-9105-5960
+title: "Urial (URI Addition tooL)"
 abstract: Add/update URIs in macOS Finder comments.
+version: 1.2.0
+date-released: 2024-01-15
 repository-code: "https://github.com/mhucka/urial"
+license: MIT
 type: software
-version: 1.1.2
-license-url: "https://github.com/mhucka/urial/blob/main/LICENSE"
 keywords:
+  - software
   - macOS
   - URI
   - desktop software
-date-released: 2023-12-22
