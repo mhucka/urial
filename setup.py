@@ -8,9 +8,8 @@
 # License: MIT License – see file "LICENSE" in the project website.
 # Website: https://github.com/mhucka/urial
 
-import os
-from   os import path
-from   setuptools import setup
+from os import path
+from setuptools import setup
 
 here = path.abspath(path.dirname(__file__))
 
