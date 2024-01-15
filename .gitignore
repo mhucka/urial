@@ -1,87 +1,20 @@
-# -*- sh -*-
-
-# Compiled source
-# .............................................................................
-
-*.com
-*.class
-*.dll
-*.exe
-*.o
-*.so
-*.dylib
-
-# Compressed archives & package files
-# .............................................................................
-
-*.7z
-*.dmg
-*.gz
-*.iso
-*.jar
-*.rar
-*.tar
-*.zip
-
-# OS-specific things to ignore:
-# .............................................................................
-
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Dropbox and similar files to ignore:
-# .............................................................................
-
-.dropbox
-
-# Emacs-specific things to ignore:
-# .............................................................................
-
-*~
-.#*
-\#*#
-.git/COMMIT_EDITMSG
-auto
-*.synctex.gz
-TAGS
-
-# LaTeX-specific things to ignore:
-# .............................................................................
-
-*.aux
-*.bbl
-*.blg
-*.fls
-*.loc
-*.lof
-*.log
-*.lot
-*.mp
-*.out
-*.toc
-*.toc
-
-# Python-specific things to ignore:
-# .............................................................................
-
-__pycache__
-*.py[cod]
-*$py.class
-
-# InnoSetup-specific things to ignore:
-# .............................................................................
-
-*.~is
-
-# Jupyter Notebook-specific things to ignore:
-# .............................................................................
-
-.ipynb_checkpoints
+# Summary: rules for files and subdirectories to be ignored by git.
+#
+# Copyright 2024 Michael Hucka.
+# License: MIT License – see file "LICENSE" in the project website.
+# Website: https://github.com/mhucka/template
+#
+# Note: the recommended approach for using this file is to add only project-
+# specific rules to the .gitignore of a repository. Each user should put rules
+# that apply to their tools and ways of working into a global git ignore file
+# using (e.g.) "git config --global core.excludesfile ~/.gitignore_global".
+# The rationale for this is that a number of file types, such as Emacs
+# checkpoint and backup files, are things that are not specific to a given
+# project; rather, Emacs creates them everywhere, in all projects, because
+# they're a byproduct of how Emacs works. Thus, rules to ignore them belong
+# in a user's own global .gitignore file, not in a project's .gitignore.
+# A useful starting point for global .gitignore file contents can be found
+# at https://github.com/github/gitignore/tree/main/Global (as of 2022-07-14)
 
 # Project-specific things to ignore:
 # .............................................................................
@@ -91,3 +24,5 @@ dist
 *.bak
 *.egg-info
 .README.md.tmp
+**/__pycache__/**
+
