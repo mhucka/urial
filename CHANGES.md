@@ -1,5 +1,16 @@
 # Change log for Urial
 
+## ★ Version 1.2.0 ★
+
+Changes in this version:
+
+* Switch to MIT license and drop mention of Caltech (the latter as a result of discussions at work).
+* Updat some files for git and metadata to follow my latest template versions of those files.
+* Add `.flake8` and `.editorconfig` files.
+* Fix some lint warnings in `__main__.py`.
+* Update the `Makefile`.
+
+
 ## ★ Version 1.1.2 ★
 
 This release fixes a bug in the arguments to the `OSAX` constructor, which takes different arguments in the latest release of the `appscript` package.
