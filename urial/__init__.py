@@ -1,16 +1,10 @@
 '''
 Urial: URI Addition tooL
 
-Authors
--------
+Copyright 2024 Michael Hucka.
 
-Michael Hucka <mhucka@caltech.edu> -- Caltech Library
-
-Copyright
----------
-Copyright (c) 2021 by Michael Hucka and the California Institute of Technology.
-This code is open-source software released under the MIT license.  Please see
-the file "LICENSE" for more information.
+Licensed under the MIT License – see file "LICENSE" in the project website.
+For more information, please visit https://github.com/mhucka/urial
 '''
 
 # Package metadata ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,11 +31,3 @@ def print_version():
     print(f'Authors: {__author__}')
     print(f'URL: {__url__}')
     print(f'License: {__license__}')
-
-
-# For Emacs users
-# .............................................................................
-# Local Variables:
-# mode: python
-# python-indent-offset: 4
-# End:
