@@ -1,4 +1,4 @@
-# Urial<img width="12%" align="right" src="https://github.com/mhucka/urial/raw/main/.graphics/urial-icon.png">
+# Urial<img width="12%" align="right" alt="Line drawing of the head of a urial sheep. Credit: Vectors Point for the Noun Project." src="https://github.com/mhucka/urial/raw/main/.graphics/urial-icon.png">
 
 Urial (_**URI** **a**ddition too**l**_) is a simple but intelligent command-line tool to add, view, or replace URIs in macOS Finder comments.
 
@@ -15,8 +15,7 @@ Urial (_**URI** **a**ddition too**l**_) is a simple but intelligent command-line
 * [Getting help](#getting-help)
 * [Contributing](#contributing)
 * [License](#license)
-* [Authors and history](#authors-and-history)
-* [Acknowledgments](#authors-and-acknowledgments)
+* [Acknowledgments](#acknowledgments)
 
 
 ## Introduction
@@ -33,6 +32,7 @@ There are multiple ways of installing the program `urial`, ranging from download
 ### _Alternative 1: downloading the ready-to-run program_
 
 A binary, ready-to-run version of `urial` is available that only needs a Python interpreter version 3.8 or higher on your computer. Happily, that's the case for macOS 10.15 and later. To be sure, first check the version of the program `python3` that you get by running the following command in a terminal and inspecting the results:
+
 ```sh
 python3 --version
 ```
@@ -40,11 +40,12 @@ python3 --version
 (Note: if this is the first time you've run `python3` on your system, macOS will ask if you want to install certain additional software components. Let it do so.) Make sure the version is at least 3.8. Note that if you are running a macOS version before 10.15, you will need to manually install Python 3.8 or later.
 
 Next,
-1. <img align="right" width="350px" src="https://github.com/mhucka/urial/raw/main/.graphics/shiv-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/urial/releases) and find the **Assets**
+
+1. <img align="right" width="350px" alt="Screenshot of Urial binary programs available for downloading from GitHub." src="https://github.com/mhucka/urial/raw/main/.graphics/shiv-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/urial/releases) and find the **Assets**
 2. **Download** the ZIP file whose name contains the version of Python on your computer
 3. **Unzip** the file (if your browser didn't unzip it)
 4. **Open the folder** that gets created (it will have a name like `urial-1.0.0-macos-python3.8`)
-5. Look inside for `urial` and **move it** to a location where you put other command-line programs (such as `/usr/local/bin`). 
+5. Look inside for `urial` and **move it** to a location where you put other command-line programs (such as `/usr/local/bin`).
 
 If you want to put it in `/usr/local/bin` but that folder does not exist on your computer yet, you can create it by opening a terminal window and running the following command (_prior_ to moving `urial` into `/usr/local/bin`):
 
@@ -62,6 +63,7 @@ sudo mv urial /usr/local/bin
 ### _Alternative 2: installation using `pipx`_
 
 You can use [pipx](https://pypa.github.io/pipx/) to install `urial`. Pipx will install it into a separate Python environment that isolates the dependencies needed by `urial` from other Python programs on your system, and yet the resulting `urial` program wil be executable from any shell &ndash; like any normal program on your computer. If you do not already have `pipx` on your system, it can be installed in a variety of easy ways and it is best to consult [Pipx's installation guide](https://pypa.github.io/pipx/installation/) for instructions. Once you have pipx on your system, you can install `urial` with the following command:
+
 ```sh
 pipx install urial
 ```
@@ -74,11 +76,13 @@ Pipx can also let you run `urial` directly using `pipx run urial`, although in t
 The instructions below assume you have a Python 3 interpreter installed on your computer.  Note that the default on macOS at least through 10.14 (Mojave) is Python **2** &ndash; please first install Python version 3 and familiarize yourself with running Python programs on your system before proceeding further.
 
 You should be able to install `urial` with [`pip`](https://pip.pypa.io/en/stable/installing/) for Python&nbsp;3.  To install `urial` from the [Python package repository (PyPI)](https://pypi.org), run the following command:
+
 ```sh
 python3 -m pip install urial
 ```
 
 As an alternative to getting it from [PyPI](https://pypi.org), you can use `pip` to install `urial` directly from GitHub:
+
 ```sh
 python3 -m pip install git+https://github.com/mhucka/urial.git
 ```
@@ -89,6 +93,7 @@ _If you already installed `urial` once before_, and want to update to the latest
 ### _Alternative 4: installation from sources_
 
 If  you prefer to install `urial` directly from the source code, you can do that too. To get a copy of the files, you can clone the GitHub repository:
+
 ```sh
 git clone https://github.com/mhucka/urial
 ```
@@ -96,6 +101,7 @@ git clone https://github.com/mhucka/urial
 Alternatively, you can download the files as a ZIP archive using this link directly from your browser using this link: <https://github.com/mhucka/urial/archive/refs/heads/main.zip>
 
 Next, after getting a copy of the files,  run `setup.py` inside the code directory:
+
 ```sh
 cd urial
 python3 setup.py install
@@ -106,7 +112,7 @@ python3 setup.py install
 
 This program expects to be given one or more arguments on the command line, as described below.  Optional arguments begin with dashes and modify the program's behavior.
 
-### Default behavior<img src="https://github.com/mhucka/urial/raw/main/.graphics/finder-get-info-screenshot.png" width="300px" align="right">
+### Default behavior<img alt="Screenshot of a Finder info dialog." src="https://github.com/mhucka/urial/raw/main/.graphics/finder-get-info-screenshot.png" width="300px" align="right">
 
 Without any optional flags or arguments to modify its behavior, `urial` expects to be given at least two argument values.  The first value should be a URI, and the second value should be the path of a file whose Finder comment is to be updated with the given URI.
 
@@ -139,6 +145,7 @@ prefs:root=General&path=VPN/DNS
 ```
 
 URIs are difficult to detect when they're embedded in human language text. One can't assume that URIs are delineated by whitespace characters, because a human or software tool may have written a Finder comment without being careful to delimit URIs from the rest of the text. Even worse, URI syntax according to [RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986) allows for a scheme name followed by an empty path, which means that in the following text,
+
 ```text
 Original source: x-devonthink-item://40C401DB-8A1D-4B1D-032FB186D85A.
 ```
@@ -164,11 +171,15 @@ The `--mode` option can be used to change the behavior described above. The foll
 
 Note carefully that `--mode overwrite` makes `urial` replace unconditionally the entire Finder comment.  In other words, `--mode overwrite` will change a Finder comment such as
 
-    Blah blah blah. URI. More blah blah blah.
+```txt
+Blah blah blah. URI. More blah blah blah.
+```
 
 to just
 
-    URI
+```txt
+URI
+```
 
 assuming that `URI` is the URI given to `urial` on the command line.  If you want to update the URI to a new value and leave rest of the text the same, use `--mode update` or simply don't provide a value for `--mode` (because `update` is the default action).
 
