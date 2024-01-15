@@ -2,7 +2,7 @@
 #
 # Copyright 2024 Michael Hucka.
 # License: MIT License – see file "LICENSE" in the project website.
-# Website: https://github.com/mhucka/template
+# Website: https://github.com/mhucka/urial
 #
 # Note: the recommended approach for using this file is to add only project-
 # specific rules to the .gitignore of a repository. Each user should put rules
@@ -24,3 +24,4 @@ dist
 *.egg-info
 .README.md.tmp
 **/__pycache__/**
+.coverage
