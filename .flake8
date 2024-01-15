@@ -47,5 +47,5 @@ per-file-ignores =
     # keyword/parameter equals"). It would be better to disable E251 just for
     # that block in the file, BUT flake8 only recognizes per-line annotations,
     # so there's no way to tell it to ignore a rule only for a block of code.
-    urial/__main__.py: E251
     urial/__init__.py: E221
+    urial/__main__.py: E251, SIM114
