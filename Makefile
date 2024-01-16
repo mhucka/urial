@@ -44,8 +44,6 @@ repo	 := $(shell git ls-remote --get-url | sed -e 's/.*:\(.*\).git/\1/')
 repo_url := https://github.com/$(repo)
 branch	 := $(shell git rev-parse --abbrev-ref HEAD)
 today	 := $(shell date "+%F")
-zipfile  := $(distdir)/$(progname)-$(version)-$(os).zip
-dmgfile  := $(distdir)/$(progname)-$(version)-$(os)-installer.dmg
 
 
 # Print help if no command is given ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,8 +99,6 @@ vars:;
 	$(eval email	:= $(strip $(shell jq -r .author[0].email codemeta.json)))
 	$(eval related	:= \
 	  $(strip $(shell jq -r '.relatedLink | if type == "array" then .[0] else . end' codemeta.json)))
-	$(eval platform := $(strip $(shell python3 -c 'import sys; print(sys.platform)')))
-	$(eval os	:= $(subst $(platform),darwin,macos))
 
 #: Print variables set in this Makefile from various sources.
 .SILENT: report
@@ -117,8 +113,6 @@ report: vars
 	echo "$(color)license$(reset)	 = $(license)"	  | expand -t 20
 	echo "$(color)repo url$(reset)	 = $(repo_url)"	  | expand -t 20
 	echo "$(color)branch$(reset)	 = $(branch)"	  | expand -t 20
-	echo "$(color)os$(reset)	 = $(os)"	  | expand -t 20
-	echo "$(color)platform$(reset)	 = $(platform)"	  | expand -t 20
 
 
 # make lint & make test ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -144,11 +138,11 @@ dependencies:;
 zipapps shiv: | run-shiv
 
 run-shiv:;
-	@mkdir -p dist/$(os)
-	dev/create-pyz/create-pyz dist/$(os) 3.8.16
-	dev/create-pyz/create-pyz dist/$(os) 3.9.16
-	dev/create-pyz/create-pyz dist/$(os) 3.10.10
-	dev/create-pyz/create-pyz dist/$(os) 3.11.2
+	@mkdir -p dist
+	dev/create-pyz/create-pyz dist 3.8.16
+	dev/create-pyz/create-pyz dist 3.9.16
+	dev/create-pyz/create-pyz dist 3.10.10
+	dev/create-pyz/create-pyz dist 3.11.2
 
 
 # make release ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -222,10 +216,10 @@ print-next-steps: vars
 
 #: Create the distribution files for PyPI.
 packages: | clean
-	-mkdir -p $(builddir) dist/$(os)
-	python3 setup.py sdist --dist-dir dist/$(os)
-	python3 setup.py bdist_wheel --dist-dir dist/$(os)
-	python3 -m twine check dist/$(os)/$(progname)-$(version).tar.gz
+	-mkdir -p build dist
+	python3 setup.py sdist --dist-dir dist
+	python3 setup.py bdist_wheel --dist-dir dist
+	python3 -m twine check dist/$(progname)-$(version).tar.gz
 
 # Note: for the next action to work, the repository "testpypi" needs to be
 # defined in your ~/.pypirc file. Here is an example file:
@@ -247,37 +241,24 @@ packages: | clean
 #: Upload distribution to test.pypi.org.
 test-pypi: packages
 	python3 -m twine upload --verbose --repository testpypi \
-	   dist/$(os)/$(progname)-$(version)*.{whl,gz}
+	   dist/$(progname)-$(version)*.{whl,gz}
 
 #: Upload distribution to pypi.org.
 pypi: packages
-	python3 -m twine upload dist/$(os)/$(progname)-$(version)*.{gz,whl}
+	python3 -m twine upload dist/$(progname)-$(version)*.{gz,whl}
 
 
 # Cleanup ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #: Clean this directory of temporary and backup files.
-clean: clean-dist clean-build clean-release clean-other
+clean: clean-build clean-dist clean-release clean-other
 	@echo ✨ Cleaned! ✨
 
 clean-build:;
-	rm -rf build/$(os)
+	rm -rf build
 
 clean-dist: vars
-	rm -fr dist/$(os)/$(progname) $(zipfile) \
-	    dist/$(os)/$(progname)-$(version)-py3-none-any.whl
-
-really-clean: clean really-clean-dist
-
-really-clean-dist:;
-	if [[ $(shell realpath `pwd`) =~ ^/Volumes ]]; then
-	    # When I'm doing this over a mounted volume between macOS machines,
-	    # normal deletion fails for unknown reasons (not file permissions).
-	    mv -f dist/$(os) dist/$(os)-ok-to-delete-$$RANDOM
-	else
-	    rm -fr dist/$(os)
-	fi
-	[[ -e dist ]] && [[ -z "$(ls -A dist)" ]] && rmdir dist
+	rm -rf dist
 
 clean-release:;
 	rm -rf codemeta.json.bak README.md.bak $(progname).egg-info
