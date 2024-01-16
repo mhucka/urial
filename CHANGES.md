@@ -7,6 +7,8 @@ Changes in this version:
 * Switch to MIT license and drop mention of Caltech (the latter as a result of discussions at work).
 * Update some files for git and metadata to follow my latest template versions of those files.
 * Add `.flake8` and `.editorconfig` files.
+* Split out requirements for linting Python code into `requirements-lint.txt`.
+* Added GitHub Actions workflows for linting code and Markdown files automatically.
 * Fix some lint warnings in `__main__.py`.
 * Update the `Makefile`.
 * Use an image of a urial, instead of the stylized line drawing.
