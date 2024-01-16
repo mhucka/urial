@@ -20,7 +20,7 @@ Urial (_**URI** **a**ddition too**l**_) is a simple but intelligent command-line
 
 ## Introduction
 
-_Urial_ (a loose acronym of _**URI** **a**ddition too**l**_) is a command-line program written in Python 3 that allows you to read, write and update URIs in the macOS Finder comments of a file. Urial makes it easier to create scripts (e.g., in Bash/Bourne shell syntax, or AppleScripts) that keep those URIs updated.  You can find an example of how the author uses this program with [DEVONthink](https://www.devontechnologies.com/apps/devonthink) in the project [wiki](https://github.com/mhucka/urial/wiki).
+_Urial_ (a loose acronym of <em><ins><b>URI</b></ins> <ins><b>a</b></ins>ddition too<ins><b>l</b></ins></em>) is a command-line program written in Python 3 that allows you to read, write and update URIs in the macOS Finder comments of a file. Urial makes it easier to create scripts (e.g., in Bash/Bourne shell syntax, or AppleScripts) that keep those URIs updated.  You can find an example of how the author uses this program with [DEVONthink](https://www.devontechnologies.com/apps/devonthink) in the project [wiki](https://github.com/mhucka/urial/wiki).
 
 Incidentally, the [urial](https://en.wikipedia.org/wiki/Urial) (properly known as _Ovis vignei_) are a kind of wild sheep native to Central and South Asia.  They are listed by the [IUCN](https://en.wikipedia.org/wiki/International_Union_for_Conservation_of_Nature) as a [vulnerable species](https://www.iucnredlist.org/species/54940655/195296049) and their population continues to twindle due to human activity, hunting, and climate change.
 
