@@ -1,4 +1,4 @@
-# Urial<img width="12%" align="right" alt="Line drawing of the head of a urial sheep. Credit: Vectors Point for the Noun Project." src="https://github.com/mhucka/urial/raw/main/.graphics/urial-icon.png">
+# Urial<img width="25%" align="right" alt="Line drawing of the head of a urial sheep. Credit: Vectors Point for the Noun Project." src="https://github.com/mhucka/urial/raw/main/.graphics/urial.png">
 
 Urial (_**URI** **a**ddition too**l**_) is a simple but intelligent command-line tool to add, view, or replace URIs in macOS Finder comments.
 
@@ -242,13 +242,27 @@ This software is Copyright © 2024 by Michael Hucka.  This software is freely di
 
 ## Acknowledgments
 
-The [vector artwork](https://thenounproject.com/icon/bighorn-sheep-head-2608122/) of a sheep with horns, used as the icon for Urial, was created by  [Vectors Point](https://thenounproject.com/vectorspoint/) from the Noun Project.  It is licensed under the Creative Commons [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/) license.
+The photograph of a sheep from the species _Ovis vignei_ shown near the top of this page is the work of user [Fabrice Stoger](https://commons.wikimedia.org/wiki/User:Fstoger), who provided it to [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:20170309_2597_Ulley-Leh_Urial.jpg) on 2017-03-09 under the terms of a [Creative Commons Attribution-Share Alike 4.0 International license](https://creativecommons.org/licenses/by-sa/4.0/deed.en). I cropped the original and added a mild drop shadow with the help of [ImageMagick](https://imagemagick.org/index.php) (version 7.1.1-23) using the following command on macOS 13.6.3:
 
-Urial makes use of numerous open-source packages, without which Urial could not have been developed.  I want to acknowledge this debt.  In alphabetical order, the packages are:
+```sh
+convert urial-cropped.jpg \
+    \( +clone -background black -shadow 10x15+0+10 \) \
+    +swap -background transparent -layers merge +repage urial.png
+```
 
-* [appscript](http://appscript.sourceforge.net/py-appscript/doc.html) &ndash; high-level Apple event bridge for controlling scriptable Mac OS X applications
+This program makes use of numerous open-source packages, without which Urial could not have been developed.  I want to acknowledge this debt.  In alphabetical order, the packages are:
+
+* [appscript](http://appscript.sourceforge.net/py-appscript/doc.html) &ndash; Apple event bridge for controlling scriptable Mac OS X applications
+* [flake8](https://github.com/pycqa/flake8) &ndash; Python code linter and style analyzer
+* [jq](https://jqlang.github.io/jq/) &ndash; JSON data processing tool
+* [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) &ndash; CLI interface for using [markdownlint](https://github.com/DavidAnson/markdownlint) to lint Markdown files
 * [plac](http://micheles.github.io/plac/) &ndash; a command line argument parser
+* [pytest-cov](https://github.com/pytest-dev/pytest-cov) &ndash; coverage reports for use with `pytest`
+* [pytest-mock](https://pypi.org/project/pytest-mock/) &ndash; wrapper around the `mock` package for use with `pytest`
+* [pytest](https://docs.pytest.org/en/stable/) &ndash; testing framework
 * [setuptools](https://github.com/pypa/setuptools) &ndash; library for `setup.py`
+* [shiv](https://github.com/linkedin/shiv) &ndash; utility for building fully self-contained Python "zipapps"
 * [Sidetrack](https://github.com/caltechlibrary/sidetrack) &ndash; simple debug logging/tracing package
-* [uritools](https://github.com/tkem/uritools/) &ndash; functions for parsing, classifying, and composing URIs
-* [wheel](https://pypi.org/project/wheel/) &ndash; setuptools extension for building wheels
+* [Twine](https://github.com/pypa/twine) &ndash; utilities for publishing Python packages on [PyPI](https://pypi.org)
+* [uritools](https://pypi.org/project/uritools/) &ndash; functions for parsing, classifying and composing URIs and URI references
+* [wheel](https://pypi.org/project/wheel/) &ndash; setuptools extension for building Python wheels
