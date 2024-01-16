@@ -8,8 +8,8 @@ For more information, please visit https://github.com/mhucka/urial
 '''
 
 import sys
-if sys.version_info <= (3, 9):
-    print('Urial requires Python version 3.9 or higher,')
+if sys.version_info <= (3, 8):
+    print('Urial requires Python version 3.8 or higher,')
     print('but the current version of Python is '
           + str(sys.version_info.major) + '.' + str(sys.version_info.minor) + '.')
     exit(1)
