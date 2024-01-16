@@ -1,5 +1,12 @@
 # Change log for Urial
 
+## ★ Version 1.2.1 ★
+
+Changes in this version:
+
+* Fix incorrect version in `__init__.py` and update Makefile to do it.
+
+
 ## ★ Version 1.2.0 ★
 
 Changes in this version:
