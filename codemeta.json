@@ -4,8 +4,8 @@
   "name": "Urial (URI Addition tooL)",
   "identifier": "urial",
   "description": "Add/update URIs in macOS Finder comments",
-  "version": "1.2.0",
-  "datePublished": "2024-01-15",
+  "version": "1.2.1",
+  "datePublished": "2024-01-16",
   "dateCreated": "2021-12-05",
   "author": [
     {

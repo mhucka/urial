@@ -15,12 +15,12 @@ For more information, please visit https://github.com/mhucka/urial
 #  ╰────────────────────── Notice ── Notice ── Notice ─────────────────────╯
 
 __program__     = 'urial'
-__version__     = '1.1.2'
-__description__ = 'URI Addition tooL: add/update a URI in a macOS Finder comment'
+__version__     = '1.2.1'
+__description__ = 'Add/update URIs in macOS Finder comments'
 __url__         = 'https://github.com/mhucka/urial'
 __author__      = 'Michael Hucka'
 __email__       = 'mhucka@caltech.edu'
-__license__     = 'BSD 3-clause'
+__license__     = 'https://github.com/mhucka/urial/blob/main/LICENSE'
 
 
 # Miscellaneous utilities.
