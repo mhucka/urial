@@ -187,7 +187,7 @@ commit-updates:
 	git diff-index --quiet HEAD $(edited) || \
 	    git commit -m"chore: update stored version number" $(edited)
 
-release-on-github: | update-all commit-updates
+release-on-github: | update-all commit-updates binaries
 	$(eval tmp_file := $(shell mktemp /tmp/release-notes-$(progname).XXXX))
 	$(eval tag := "v$(shell tr -d '()' <<< "$(version)" | tr ' ' '-')")
 	git push -v --all
@@ -200,7 +200,7 @@ release-on-github: | update-all commit-updates
 	$(EDITOR) $(tmp_file)
 	gh release create $(tag) -t "Release $(version)" -F $(tmp_file)
 	gh release edit $(tag) --latest
-	gh release upload $(tag) $(find dist -name '*.zip')
+	gh release upload $(tag) $(shell find dist -name '*.zip')
 
 print-next-steps: vars
 	@$(info ┏━━━━━━━━━━━━┓)
