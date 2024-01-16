@@ -43,6 +43,7 @@ version	 := $(strip $(shell jq -r .version codemeta.json))
 repo	 := $(shell git ls-remote --get-url | sed -e 's/.*:\(.*\).git/\1/')
 repo_url := https://github.com/$(repo)
 branch	 := $(shell git rev-parse --abbrev-ref HEAD)
+initfile := $(progname)/__init__.py
 today	 := $(shell date "+%F")
 
 
@@ -164,7 +165,22 @@ confirm-release:
 	  exit 1
 	fi
 
-update-all: update-meta update-citation
+update-all: update-setup update-init update-meta update-citation
+
+update-setup: vars
+	@sed -i .bak -e '/^version/ s|= .*|= $(version)|'    setup.cfg
+	@sed -i .bak -e '/^description/ s|= .*|= $(desc)|'   setup.cfg
+	@sed -i .bak -e '/^author / s|= .*|= $(author)|'     setup.cfg
+	@sed -i .bak -e '/^author_email/ s|= .*|= $(email)|' setup.cfg
+	@sed -i .bak -e '/^license / s|= .*|= $(license)|'   setup.cfg
+
+update-init: vars
+	@sed -i .bak -e "s|^\(__version__ *=\).*|\1 '$(version)'|"  $(initfile)
+	@sed -i .bak -e "s|^\(__description__ *=\).*|\1 '$(desc)'|" $(initfile)
+	@sed -i .bak -e "s|^\(__url__ *=\).*|\1 '$(url)'|"	    $(initfile)
+	@sed -i .bak -e "s|^\(__author__ *=\).*|\1 '$(author)'|"    $(initfile)
+	@sed -i .bak -e "s|^\(__email__ *=\).*|\1 '$(email)'|"	    $(initfile)
+	@sed -i .bak -e "s|^\(__license__ *=\).*|\1 '$(license)'|"  $(initfile)
 
 # Note that this doesn't replace "version" in codemeta.json, because that's the
 # variable from which this makefile gets its version number in the first place.
@@ -180,7 +196,7 @@ update-citation: vars
 	@sed -i .bak -e '/^date-released:/ s|".*"|"$(today)"|' CITATION.cff
 	@sed -i .bak -e '/^repository-code:/ s|".*"|"$(repo_url)"|' CITATION.cff
 
-edited := codemeta.json CITATION.cff
+edited := setup.cfg codemeta.json $(initfile) CITATION.cff
 
 commit-updates:
 	git add $(edited)
