@@ -217,6 +217,7 @@ release-on-github: | update-all commit-updates binaries
 	gh release create $(tag) -t "Release $(version)" -F $(tmp_file)
 	gh release edit $(tag) --latest
 	gh release upload $(tag) $(shell find dist -name '*.zip')
+	open "$(repo_url)/releases"
 
 print-next-steps: vars
 	@$(info ┏━━━━━━━━━━━━┓)
